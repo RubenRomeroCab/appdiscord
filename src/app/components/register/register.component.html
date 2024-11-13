@@ -1,0 +1,37 @@
+<div class="container">
+
+    <h1 class="text-center">Registro</h1>
+    
+    <form (ngSubmit)="registrar(formregistro)"  
+    #formregistro="ngForm"
+    class="text-center">
+
+    <div class="mt-3">
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Introduce tu Nombre" [(ngModel)]="usuario.name">
+        </div>
+    
+        <div class="mt-3">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Introduce tu Email" [(ngModel)]="usuario.email">
+        </div>
+    
+        <div class="mt-3">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Introduce tu Password" class="form-control" [(ngModel)]="usuario.password">
+        </div>
+    
+        <div class="mt-3">
+                             
+            <a class="text-decoration-none" [routerLink]="['/login']" >¿Ya tienes cuenta? / Login</a>
+        </div>
+    
+    
+        <div class="mt-4">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+        </div>
+    
+    </form>
+    
+    </div>
+    

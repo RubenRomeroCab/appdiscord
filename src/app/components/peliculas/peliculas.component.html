@@ -1,0 +1,15 @@
+<div class="container mt-4">
+    <h2 class="text-center mt-4">Todas nuestras peliculas</h2>
+@for (pelicula of peliculas; track $index) {
+    <div class="card text-center mt-4" style="width: 18rem;">
+       <img src="{{pelicula.img}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{pelicula.nombre}}</h5>
+          <p class="card-text">{{cortarTexto(pelicula.descripcion,200)}}</p>
+          <p>{{pelicula.idUsuario}}</p>
+          <a href="#" class="btn btn-primary">Votar</a>
+        </div>
+      </div>
+
+      }
+</div>

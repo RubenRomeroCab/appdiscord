@@ -1,0 +1,26 @@
+<div class="container">
+    <h1 class="text-center" *ngIf="user">Bienvenido {{user.displayName}}</h1>
+    <div class=" text-center bg-body-tertiary rounded-3 m-3 p-2">
+        <img src="intro1.png" class="bi mt-4 mb-3" style="color: var(--bs-indigo);" width="100" height="100">
+        <h1 class="text-body-emphasis">¡Elige la próxima película en nuestra noche de Discord!</h1>
+        <p class="col-lg-8 mx-auto fs-5 text-muted">
+            ¿No sabes qué ver? Deja que la comunidad decida por ti. Cada semana, votamos por una película diferente para
+            ver juntos en Discord. ¡Únete a la diversión, comparte tus favoritos y ayuda a elegir la mejor opción!
+        </p>
+        <div class="d-inline-flex gap-2 mb-5">
+            <a [routerLink]="['/peliculas']"   class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+                Votar ahora
+            </a>
+            <button class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
+                Ver resultados actuales
+            </button>
+        </div>
+    </div>
+
+    <h2 class="text-center">Las Peliculas De Esta Semana</h2>
+
+    <button class="btn btn-primary" (click)="salir()">Salir</button>
+
+
+
+</div>
