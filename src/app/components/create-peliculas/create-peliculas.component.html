@@ -1,0 +1,23 @@
+<div class="container text-center mt-3">
+  <h2>Sube tu Pelicula</h2>
+  <form (ngSubmit)="subir(formPelicula)" #formPelicula="ngForm">
+    <label for="nombre">Nombre de la pelicula</label>
+    <input type="text" placeholder="Nombre de la pelicula" id="nombre" name="nombre" class="form-control mb-3"
+      [(ngModel)]="pelicula.nombre">
+
+    <label for="descripcion">Descripcion de la pelicula</label>
+    <input type="text" placeholder="Descripcion" id="descripcion" name="descripcion" class="form-control mb-3"
+      [(ngModel)]="pelicula.descripcion">
+
+    <label for="img">Imagen de la pelicula</label>
+    <input type="text" placeholder="Link de la img" id="img" name="img" class="form-control mb-3"
+      [(ngModel)]="pelicula.img">
+
+    <label for="trailer">Trailer de la pelicula</label>
+    <input type="text" placeholder="Trailer" id="trailer" name="trailer" class="form-control mb-3"
+      [(ngModel)]="pelicula.trailer">
+
+    <input type="hidden" [(ngModel)]="pelicula.idUser" name="nombre">
+    <button class="btn btn-primary">Enviar</button>
+  </form>
+</div>
