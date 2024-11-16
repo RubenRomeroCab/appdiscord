@@ -7,9 +7,11 @@ import { PeliculasComponent } from './components/peliculas/peliculas.component';
 import { SeriesComponent } from './components/series/series.component';
 import { PerfileComponent } from './components/perfile/perfile.component';
 import { CreatePeliculasComponent } from './components/create-peliculas/create-peliculas.component';
+import { PeliculaDetailsComponent } from './components/pelicula-details/pelicula-details.component';
 
 export const routes: Routes = [
     {path:'home',component:HomeComponent,canActivate:[authGuard]},
+    {path:'pelicula-detail/:id',component:PeliculaDetailsComponent,canActivate:[authGuard]},
     {path:'perfile',component:PerfileComponent,canActivate:[authGuard]},
     {path:'series',component:SeriesComponent,canActivate:[authGuard]},
     {path:'peliculas',component:PeliculasComponent,canActivate:[authGuard]},

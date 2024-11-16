@@ -23,12 +23,32 @@ export class CreatePeliculasComponent {
       this.pelicula.idUser = data.displayName;
     })
   }
+
+
+  esYoutubeUrl(url: string): boolean {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w\-]{11}(&.*)?$/;
+    return youtubeRegex.test(url);
+  }
+
+
   subir(form:NgForm){
     console.log(form.value);  
     if(form.invalid){
       return
     }else{
-      this.serviceMovies.addMovies(this.pelicula)
+      if (!this.esYoutubeUrl(this.pelicula.trailer)) {
+        console.log('La URL del tráiler no es válida.');
+        return;
+      }
+      
+
+      //usamos esto para quitar el id de this.pelicula ya que firebase no acepta valores vacios o no definidos 
+      //como el id no lo tenemos hasta que se crea por eso lo hacemos asi 
+      const peliculaData ={...this.pelicula};
+      delete peliculaData.id;
+
+
+      this.serviceMovies.addMovies(peliculaData)
       .then(()=>{
         console.log("pelicula agregada")
         form.resetForm;

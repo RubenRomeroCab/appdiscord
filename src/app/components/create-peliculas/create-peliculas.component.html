@@ -2,7 +2,7 @@
   <h2>Sube tu Pelicula</h2>
   <form (ngSubmit)="subir(formPelicula)" #formPelicula="ngForm">
     <label for="nombre">Nombre de la pelicula</label>
-    <input type="text" placeholder="Nombre de la pelicula" id="nombre" name="nombre" class="form-control mb-3"
+    <input type="text" placeholder="Nombre de la pelicula" id="nombrepelicula" name="nombrepelicula" class="form-control mb-3"
       [(ngModel)]="pelicula.nombre">
 
     <label for="descripcion">Descripcion de la pelicula</label>

@@ -1,0 +1,14 @@
+/* Aplica object-fit: cover para pantallas grandes y asegurarse de que las imágenes cubran todo el área */
+.carousel-item img {
+   /* Asegura que la imagen cubra completamente el contenedor sin distorsionarse */
+    width: 100%;       /* Hace que la imagen ocupe todo el ancho disponible */
+    height: 600px;     /* Asegura una altura constante en pantallas grandes */
+  }
+  
+  /* Responsivo: en pantallas pequeñas, ajustamos la altura */
+  @media (max-width: 767px) {
+    .carousel-item img {
+        object-fit: cover; 
+      height: 400px;  /* Ajusta la altura para dispositivos móviles */
+    }
+  }

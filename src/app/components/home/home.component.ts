@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { User } from 'firebase/auth';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PeliculaModel } from '../../models/peliculas.model';
 import { PeliculasService } from '../../services/peliculas.service';
 
@@ -18,7 +18,8 @@ export class HomeComponent implements OnInit{
   user!: User
   peliculas:PeliculaModel [] =[];
   constructor(private userService: AuthService,
-              private peliculasService:PeliculasService 
+              private peliculasService:PeliculasService ,
+              private router:Router
   ) {
     this.user = this.userService.user;
   }
@@ -33,6 +34,10 @@ export class HomeComponent implements OnInit{
       return texto.substring(0, cantidad) + "...";  // Cortar y agregar "..."
     }
     return texto
+  }
+
+  verPeliculaDetail(id:string){
+    this.router.navigate([`/pelicula-detail/${id}`])
   }
 
   salir() {
