@@ -1,15 +1,23 @@
-<div class="container">
-
-  <h2>{{pelicula?.nombre}}</h2> 
+<div class="container ">
+    <div class="text-center">
+    <h2 class="m-3">{{pelicula?.nombre}}</h2> 
+    <img src="{{pelicula?.img}}" alt="{{pelicula?.nombre}}" class="img-fluid mt-4" width="400px" height="500px">
   
-  <img src="{{pelicula?.img}}" alt="{{pelicula?.nombre}}" class="img-fluid">
-
-  <p>{{pelicula?.descripcion}}</p>
-
-    <iframe src="{{pelicula?.trailer}}" frameborder="0"></iframe>
-
+    <p class="m-4">{{pelicula?.descripcion}}</p>
   
-</div>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe *ngIf="link" 
+              [src]="link | domseguro" 
+              class="embed-responsive-item"
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
+              allowfullscreen>
+      </iframe>
+    </div>
 
 
+    <button class="btn btn-primary m-4 btn-lg">Votar</button>
+    </div>
 
+  </div>

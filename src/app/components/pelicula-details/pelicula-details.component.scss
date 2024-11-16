@@ -1,0 +1,18 @@
+.embed-responsive-16by9 iframe {
+    width: 100%; /* Asegura que el iframe ocupe todo el ancho disponible */
+    height: 315px; /* Un tamaño base para pantallas más pequeñas */
+  }
+  
+  /* Media Query para pantallas grandes (por ejemplo, > 768px) */
+  @media (min-width: 768px) {
+    .embed-responsive-16by9 iframe {
+      height: 450px; /* Aumenta la altura del iframe en pantallas más grandes */
+    }
+  }
+  
+  /* Media Query para pantallas extra grandes (por ejemplo, > 1200px) */
+  @media (min-width: 1200px) {
+    .embed-responsive-16by9 iframe {
+      height: 600px; /* Aumenta aún más la altura para pantallas muy grandes */
+    }
+  }
