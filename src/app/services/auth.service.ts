@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from 'firebase/auth';
 import { UsuarioModel } from '../models/usuario.model';
-import { Auth, idToken } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -15,7 +15,7 @@ export class AuthService {
   private userSubject = new BehaviorSubject<User | null>(null);
   user$ = this.userSubject.asObservable();
 
-  
+
   user!: User
   currentUser!: User | null;
 
@@ -23,12 +23,10 @@ export class AuthService {
   constructor(private auth: Auth,
     private route: Router
   ) {
-      auth.onAuthStateChanged(user=>{
-        this.userSubject.next(user);
-      })
+    auth.onAuthStateChanged(user => {
+      this.userSubject.next(user);
+    })
   }
-
-
 
   // Verificar si el usuario está autenticado
   isAuthenticated(): boolean {
@@ -86,7 +84,7 @@ export class AuthService {
       })
   }
 
-  getUser(){
+  getUser() {
     return this.userSubject.value;
   }
 }

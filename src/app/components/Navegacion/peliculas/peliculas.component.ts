@@ -3,7 +3,7 @@ import { collectionData ,Firestore} from '@angular/fire/firestore';
 import {  collection, doc,getDoc,getDocs} from 'firebase/firestore';
 
 import { Observable } from 'rxjs';
-import { PeliculasService } from '../../services/peliculas.service';
+import { PeliculasService } from '../../../services/peliculas.service';
 
 @Component({
   selector: 'app-peliculas',

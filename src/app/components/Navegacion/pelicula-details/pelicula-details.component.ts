@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PeliculasService } from '../../services/peliculas.service';
+import { PeliculasService } from '../../../services/peliculas.service';
 import { ActivatedRoute } from '@angular/router';
-import { PeliculaModel } from '../../models/peliculas.model';
-import { DomseguroPipe } from '../../pipes/domseguro.pipe';
+import { PeliculaModel } from '../../../models/peliculas.model';
+import { DomseguroPipe } from '../../../pipes/domseguro.pipe';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -32,8 +32,6 @@ export class PeliculaDetailsComponent implements OnInit {
       if(this.pelicula){
         this.link = this.pelicula.trailer.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
       }
-      
-     
       })
     }
     

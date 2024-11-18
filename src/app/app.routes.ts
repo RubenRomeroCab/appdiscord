@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/User/login/login.component';
+import { RegisterComponent } from './components/User/register/register.component';
+import { HomeComponent } from './components/Navegacion/home/home.component';
 import { authGuard } from './guards/auth.guard';
-import { PeliculasComponent } from './components/peliculas/peliculas.component';
-import { SeriesComponent } from './components/series/series.component';
-import { PerfileComponent } from './components/perfile/perfile.component';
-import { CreatePeliculasComponent } from './components/create-peliculas/create-peliculas.component';
-import { PeliculaDetailsComponent } from './components/pelicula-details/pelicula-details.component';
+import { PeliculasComponent } from './components/Navegacion/peliculas/peliculas.component';
+import { SeriesComponent } from './components/Navegacion/series/series.component';
+import { PerfileComponent } from './components/User/perfile/perfile.component';
+import { CreatePeliculasComponent } from './components/Navegacion/create-peliculas/create-peliculas.component';
+import { PeliculaDetailsComponent } from './components/Navegacion/pelicula-details/pelicula-details.component';
 
 export const routes: Routes = [
     {path:'home',component:HomeComponent,canActivate:[authGuard]},

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { PeliculaModel } from '../../models/peliculas.model';
-import { PeliculasService } from '../../services/peliculas.service';
-import { AuthService } from '../../services/auth.service';
+import { PeliculaModel } from '../../../models/peliculas.model';
+import { PeliculasService } from '../../../services/peliculas.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-create-peliculas',
