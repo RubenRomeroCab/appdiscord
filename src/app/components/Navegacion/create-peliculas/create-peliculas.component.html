@@ -3,7 +3,7 @@
   <form (ngSubmit)="subir(formPelicula)" #formPelicula="ngForm">
     <!-- Campo para el nombre de la película -->
     <label for="nombrepelicula">Nombre de la película</label>
-    <input 
+    <input
       type="text" 
       placeholder="Escribe el nombre de la película" 
       id="nombrepelicula" 
@@ -50,8 +50,10 @@
     <!-- Campo oculto para almacenar el ID del usuario -->
     <input type="hidden" [(ngModel)]="pelicula.idUser" name="idUser">
   
+    <input type="hidden" [(ngModel)]="pelicula.imgUser" name="imgUser">
     <!-- Botón para enviar el formulario -->
-    <button class="btn btn-primary">Enviar</button>
+    <button  class="btn btn-primary">Enviar</button>
+    <p class="text-danger mt-3">En el modo demo el crear películas esta deshabilitado</p>
   </form>
 
   <p class="text-danger mt-3" >Asegúrate de tener tu perfil listo antes de subir las películas</p>

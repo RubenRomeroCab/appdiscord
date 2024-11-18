@@ -4,16 +4,19 @@ import { PeliculaModel } from '../../../models/peliculas.model';
 import { PeliculasService } from '../../../services/peliculas.service';
 import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { UsuarioModel } from '../../../models/usuario.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-peliculas',
   standalone: true,
-  imports: [FormsModule,RouterLink],
+  imports: [FormsModule,RouterLink,CommonModule],
   templateUrl: './create-peliculas.component.html',
   styleUrl: './create-peliculas.component.scss'
 })
 export class CreatePeliculasComponent {
 
+  user!:any | null
   pelicula!:PeliculaModel
   
   constructor(private serviceMovies:PeliculasService,
@@ -22,6 +25,7 @@ export class CreatePeliculasComponent {
     this.pelicula= new PeliculaModel;
     this.serviceUser.user$.subscribe((data:any) =>{
       this.pelicula.idUser = data.displayName;
+      this.pelicula.imgUser= data.photoURL;
     })
   }
 
@@ -41,10 +45,10 @@ export class CreatePeliculasComponent {
         console.log('La URL del tráiler no es válida.');
         return;
       }
-      
-
       //usamos esto para quitar el id de this.pelicula ya que firebase no acepta valores vacios o no definidos 
       //como el id no lo tenemos hasta que se crea por eso lo hacemos asi 
+      
+      return;
       const peliculaData ={...this.pelicula};
       delete peliculaData.id;
 

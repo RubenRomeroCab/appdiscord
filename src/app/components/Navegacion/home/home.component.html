@@ -27,12 +27,14 @@
                 <div class="card-body">
                   <h5 class="card-title">{{pelicula.nombre}}</h5>
                   <p class="card-text">{{cortarTexto(pelicula.descripcion,200)}}</p>
-                  <p>{{pelicula.idUser}}</p>
+                  <p class="fw-bold">
+                     <img class="rounded-circle" [src]="pelicula.imgUser"  alt="" width="30px" height="30px">
+                     {{pelicula.idUser}}
+                  </p>
                     <button *ngIf="pelicula.id" (click)="verPeliculaDetail(pelicula.id)" class="btn btn-primary">Ver Pelicula</button>
                 </div>
               </div>
             </div>
             }
     </div>
-
 </div>
