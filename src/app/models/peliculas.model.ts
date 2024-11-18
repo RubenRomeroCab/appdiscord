@@ -8,5 +8,6 @@ export class PeliculaModel{
     img!:string;
     trailer!:string;
     idUser!:string;
+    imgUser?:string
 
 }

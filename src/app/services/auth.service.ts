@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updateProfile, User } from 'firebase/auth';
 import { UsuarioModel } from '../models/usuario.model';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -87,4 +87,44 @@ export class AuthService {
   getUser() {
     return this.userSubject.value;
   }
+
+
+  actualizarImg(img:string){
+    if(img && this.auth.currentUser){
+      updateProfile(this.auth.currentUser, {photoURL:img})
+      .then(()=>{
+        console.log("IMG ACTUALIZADA")
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    }
+    
+  }
+  actualizarNombre(nombre: string): void {
+    const user = this.auth.currentUser;
+    if (user) {
+      updateProfile(user, { displayName: nombre })
+      .then(()=>{
+        console.log("Correo actualizado");
+      })
+      .catch((erorr)=>{
+        console.log(erorr);
+      })
+    }
+  }
+
+  actualizarEmail(email: string): void {
+    const user = this.auth.currentUser;
+    if (user) {
+      updateEmail(user, email)
+        .then(() => {
+          console.log('Correo actualizado correctamente');
+        })
+        .catch(error => {
+          console.error('Error al actualizar el correo:', error);
+        });
+    }
+  }
+  
 }

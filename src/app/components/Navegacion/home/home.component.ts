@@ -16,7 +16,7 @@ import { PeliculasService } from '../../../services/peliculas.service';
 export class HomeComponent implements OnInit{
 
   user!: User
-  peliculas:PeliculaModel [] =[];
+  peliculas:any =[];
   constructor(private userService: AuthService,
               private peliculasService:PeliculasService ,
               private router:Router
@@ -24,9 +24,12 @@ export class HomeComponent implements OnInit{
     this.user = this.userService.user;
   }
   ngOnInit(): void {
+    console.log("Estamos en el component home")
     this.peliculasService.getPeliculas().subscribe((data:any) =>{
       this.peliculas= data;
+      console.log(this.peliculas)
     });
+    
   }
 
   cortarTexto(texto:string, cantidad:number):string{
@@ -36,11 +39,15 @@ export class HomeComponent implements OnInit{
     return texto
   }
 
-  verPeliculaDetail(id:string){
-    this.router.navigate([`/pelicula-detail/${id}`])
-  }
-
+ 
   salir() {
     this.userService.logout();
   }
+
+ verPeliculaDetail(id:string){
+    console.log("Peliculas homeComponent desde el home")
+    this.router.navigate([`/pelicula-detail/${id}`])
+  }
+
+ 
 }

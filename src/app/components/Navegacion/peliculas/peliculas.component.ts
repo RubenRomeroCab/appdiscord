@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { collectionData ,Firestore} from '@angular/fire/firestore';
-import {  collection, doc,getDoc,getDocs} from 'firebase/firestore';
-
-import { Observable } from 'rxjs';
 import { PeliculasService } from '../../../services/peliculas.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-peliculas',
@@ -17,7 +15,10 @@ export class PeliculasComponent implements OnInit {
 
   peliculas : any = []
 
-  constructor(private servicePeliculas:PeliculasService) {}
+
+  constructor(private servicePeliculas:PeliculasService,
+              private router:Router
+  ) {}
 
   ngOnInit(): void {
    this.servicePeliculas.getPeliculas().subscribe((data: any) =>{
@@ -33,6 +34,13 @@ export class PeliculasComponent implements OnInit {
     }
     return texto;  // Si el texto es corto, devuélvelo tal cual
   }
+
+
+  verPelicula(id:string){
+    console.log("Peliculas peliculasComponent y navegamos hasta pelicula-details")
+    this.router.navigate([`/pelicula-detail/${id}`])
+  }
+
 
 
 }

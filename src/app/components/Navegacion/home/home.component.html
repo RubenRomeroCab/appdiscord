@@ -23,7 +23,7 @@
         @for (pelicula of peliculas; track $index) {
             <div class="col-sm-12 col-md-6 col-lg-4">
               <div class="card text-center mt-4">
-                <img src="{{pelicula.img}}" class="card-img-top" alt="...">
+                <img [src]="pelicula.img" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">{{pelicula.nombre}}</h5>
                   <p class="card-text">{{cortarTexto(pelicula.descripcion,200)}}</p>

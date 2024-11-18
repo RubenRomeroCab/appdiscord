@@ -16,6 +16,7 @@ export class PeliculasService {
 
   constructor(private servicePeliculas: Firestore) { 
     this.peliculasCollection = collection(this.servicePeliculas,'peliculas');
+    
   }
 
   getPeliculas(): Observable<PeliculaModel[]> {
@@ -31,4 +32,7 @@ export class PeliculasService {
     const peliculaDocRef = doc(this.servicePeliculas, 'peliculas', id);  // Referencia al documento de la película
     return docData(peliculaDocRef, { idField: 'id' }) as Observable<PeliculaModel>;
   }
+
+
+  
 }
