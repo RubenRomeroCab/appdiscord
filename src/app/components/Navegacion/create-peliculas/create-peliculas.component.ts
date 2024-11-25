@@ -48,11 +48,11 @@ export class CreatePeliculasComponent {
       //usamos esto para quitar el id de this.pelicula ya que firebase no acepta valores vacios o no definidos 
       //como el id no lo tenemos hasta que se crea por eso lo hacemos asi 
       
-      return;
+     
       const peliculaData ={...this.pelicula};
       delete peliculaData.id;
 
-
+    
       this.serviceMovies.addMovies(peliculaData)
       .then(()=>{
         console.log("pelicula agregada")
