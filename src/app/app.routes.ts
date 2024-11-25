@@ -10,11 +10,11 @@ import { CreatePeliculasComponent } from './components/Navegacion/create-pelicul
 import { PeliculaDetailsComponent } from './components/Navegacion/pelicula-details/pelicula-details.component';
 
 export const routes: Routes = [
-    {path:'home',component:HomeComponent,canActivate:[authGuard]},
-    {path:'pelicula-detail/:id',component:PeliculaDetailsComponent,canActivate:[authGuard]},
+    {path:'home',component:HomeComponent},
+    {path:'pelicula-detail/:id',component:PeliculaDetailsComponent},
     {path:'perfile',component:PerfileComponent,canActivate:[authGuard]},
-    {path:'series',component:SeriesComponent,canActivate:[authGuard]},
-    {path:'peliculas',component:PeliculasComponent,canActivate:[authGuard]},
+    {path:'series',component:SeriesComponent},
+    {path:'peliculas',component:PeliculasComponent},
     {path:'create',component:CreatePeliculasComponent},
     {path:'register',component:RegisterComponent},
     {path:'login',component:LoginComponent},
