@@ -47,7 +47,4 @@ Thumbs.db
 .runtimeconfig.json
 src/environments/environment.development.ts
 
-public/breakingbad.jpg
-public/breakingbad.webp
-public/ozark.webp
-public/prision.png
+
