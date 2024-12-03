@@ -17,7 +17,7 @@ export class UsersService {
    * Save a new user to Firestore.
    * @param user - User object to save.
    */
-  async saveUserToFirestore(user: AppUser): Promise<void> {
+  async saveUser(user: AppUser): Promise<void> {
     const userRef = doc(this.firestore, `${this.collectionName}/${user.id}`);
     return setDoc(userRef, user);
   }

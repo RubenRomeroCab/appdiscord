@@ -3,16 +3,16 @@
 
   <div class="row ">
 
-    @for (pelicula of peliculas; track $index) {
+    @for (movie of movies; track $index) {
     <div class="col-sm-12 col-md-6 col-lg-4">
       <div class="card text-center mt-4">
-        <img src="{{pelicula.img}}" class="card-img-top" alt="...">
+        <img src="{{movie.image}}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">{{pelicula.nombre}}</h5>
-          <p class="card-text">{{cortarTexto(pelicula.descripcion,200)}}</p>
+          <h5 class="card-title">{{movie.name}}</h5>
+          <p class="card-text">{{cortarTexto(movie.description,200)}}</p>
           <p>
-          Recomendada por :  {{pelicula.idUser}}</p>
-          <button (click)="verPelicula(pelicula.id)" class="btn btn-primary">Ver Pelicula</button>
+          <!-- Recomendada por :  {{movie.idUser}}</p> -->
+          <button (click)="verPelicula(movie.id)" class="btn btn-primary">Ver Pelicula</button>
         </div>
       </div>
     </div>

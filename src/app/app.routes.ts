@@ -15,7 +15,7 @@ export const routes: Routes = [
     {path:'perfile',component:PerfileComponent,canActivate:[authGuard]},
     {path:'series',component:SeriesComponent},
     {path:'peliculas',component:PeliculasComponent},
-    {path:'create',component:CreatePeliculasComponent},
+    {path:'create',component:CreatePeliculasComponent,canActivate:[authGuard]},
     {path:'register',component:RegisterComponent},
     {path:'login',component:LoginComponent},
     {path:'',redirectTo:'home',pathMatch:'full'}

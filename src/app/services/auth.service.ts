@@ -36,12 +36,13 @@ export class AuthService {
 
           const newUser: AppUser = {
             id: user.uid,
+            name: name,
             reputation: 0,
             likedGenres: {},
           };
 
           // Save user to Firestore
-          return this.usersService.saveUserToFirestore(newUser).then(() => newUser);
+          return this.usersService.saveUser(newUser).then(() => newUser);
         }
 
         return null;

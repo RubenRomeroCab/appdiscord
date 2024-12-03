@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PeliculasService } from '../../../services/peliculas.service';
+import { MoviesService } from '../../../services/movies.service';
 import { Router } from '@angular/router';
+import { Movie } from '../../../models/movie.model';
 
 
 @Component({
@@ -12,21 +13,18 @@ import { Router } from '@angular/router';
 })
 export class PeliculasComponent implements OnInit {
 
+  movies: Movie[] = []
 
-  peliculas : any = []
-
-
-  constructor(private servicePeliculas:PeliculasService,
-              private router:Router
-  ) {}
+  constructor(private moviesService: MoviesService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-   this.servicePeliculas.getPeliculas().subscribe((data: any) =>{
-    this.peliculas = data
-    console.log(this.peliculas)
-   })
+    this.moviesService.getMovies().then((movies) => {
+      this.movies = movies;
+    }
+    );
   }
-
 
   cortarTexto(texto: string, longitudMaxima: number): string {
     if (texto.length > longitudMaxima) {
@@ -36,7 +34,7 @@ export class PeliculasComponent implements OnInit {
   }
 
 
-  verPelicula(id:string){
+  verPelicula(id: string | undefined) {
     console.log("Peliculas peliculasComponent y navegamos hasta pelicula-details")
     this.router.navigate([`/pelicula-detail/${id}`])
   }

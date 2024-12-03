@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Movie } from '../../../models/movie.model';
-import { PeliculasService } from '../../../services/peliculas.service';
+import { MoviesService } from '../../../services/movies.service';
 import { AuthService } from '../../../services/auth.service';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AppUtils } from '../../../utils/AppUtils';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-peliculas',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule],
+  imports: [
+    ReactiveFormsModule, 
+    CommonModule],
   templateUrl: './create-peliculas.component.html',
   styleUrl: './create-peliculas.component.scss'
 })
@@ -17,50 +21,43 @@ export class CreatePeliculasComponent {
 
   pelicula!: Movie
 
+  movieForm: FormGroup;
+
   constructor(
-    private serviceMovies: PeliculasService,
-    private serviceUser: AuthService
+    private moviesService: MoviesService,
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private _snackbar: MatSnackBar,
+    private router: Router
   ) {
-
+    this.movieForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: [''],
+      image: ['', [Validators.pattern(/https?:\/\/.+/)]], // Ensure valid URL if provided
+      trailer: ['', [Validators.pattern(/https?:\/\/.+/)]], // Ensure valid URL if provided
+      genre: ['', [Validators.required]],
+    });
   }
 
+  save() {
+    if (this.movieForm.valid) {
+      const newMovie: Movie = {
+        ...this.movieForm.value,
+        proposerId: this.authService.getCurrentUser()?.uid,
+        createdAt: new Date().toISOString(),
+        totalVotes: 0,
+        averageRating: 0,
+      };
 
-  esYoutubeUrl(url: string): boolean {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w\-]{11}(&.*)?$/;
-    return youtubeRegex.test(url);
-  }
-
-
-  subir(form: NgForm) {
-    console.log(form.value);
-    if (form.invalid) {
-      return
-    } else {
-      if (this.pelicula.trailer) {
-        if (!this.esYoutubeUrl(this.pelicula.trailer)) {
-          console.log('La URL del tráiler no es válida.');
-          return;
-        }
-      }
-
-      //usamos esto para quitar el id de this.pelicula ya que firebase no acepta valores vacios o no definidos 
-      //como el id no lo tenemos hasta que se crea por eso lo hacemos asi 
-
-
-      const peliculaData = { ...this.pelicula };
-      delete peliculaData.id;
-
-
-      this.serviceMovies.addMovies(peliculaData)
+      this.moviesService.addMovie(newMovie)
         .then(() => {
-          console.log("pelicula agregada")
-          form.resetForm;
+          this.router.navigate(['peliculas']);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error.message)
-
-
         })
+    } else {
+      this._snackbar.open("Erro en el formulario", undefined, AppUtils.snackBarErrorConfig);
     }
   }
 }

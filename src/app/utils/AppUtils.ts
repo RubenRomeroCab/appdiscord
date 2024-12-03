@@ -66,4 +66,9 @@ export abstract class AppUtils {
     return textArea.value;
   }
 
+  public static esYoutubeUrl(url: string): boolean {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w\-]{11}(&.*)?$/;
+    return youtubeRegex.test(url);
+  }
+
 }

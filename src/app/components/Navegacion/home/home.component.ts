@@ -3,7 +3,7 @@ import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { User } from 'firebase/auth';
 import { Router, RouterLink } from '@angular/router';
-import { PeliculasService } from '../../../services/peliculas.service';
+import { MoviesService } from '../../../services/movies.service';
 
 @Component({
   selector: 'app-home',
@@ -17,16 +17,16 @@ export class HomeComponent implements OnInit{
   user!: User
   peliculas:any =[];
   constructor(private userService: AuthService,
-              private peliculasService:PeliculasService ,
+              private moviesService:MoviesService ,
               private router:Router
   ) {
   }
   ngOnInit(): void {
     console.log("Estamos en el component home")
-    this.peliculasService.getPeliculas().subscribe((data:any) =>{
-      this.peliculas= data;
-      console.log(this.peliculas)
-    });
+    // this.moviesService.getPeliculas().subscribe((data:any) =>{
+    //   this.peliculas= data;
+    //   console.log(this.peliculas)
+    // });
     
   }
 
