@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Movie } from '../../../models/movie.model';
 import { DomseguroPipe } from '../../../pipes/domseguro.pipe';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/auth.service';
 import { take } from 'rxjs';
 
 @Component({

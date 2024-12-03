@@ -9,7 +9,7 @@
       id="nombrepelicula" 
       name="nombrepelicula" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.nombre" 
+      [(ngModel)]="pelicula.name" 
       required
     >
   
@@ -21,7 +21,7 @@
       id="descripcion" 
       name="descripcion" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.descripcion" 
+      [(ngModel)]="pelicula.description" 
       required
     >
   
@@ -33,7 +33,7 @@
       id="img" 
       name="img" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.img"
+      [(ngModel)]="pelicula.image"
     >
   
     <!-- Campo para el tráiler de la película -->
@@ -48,9 +48,9 @@
     >
   
     <!-- Campo oculto para almacenar el ID del usuario -->
-    <input type="hidden" [(ngModel)]="pelicula.idUser" name="idUser">
+    <input type="hidden" [(ngModel)]="pelicula.proposerId" name="idUser">
   
-    <input type="hidden" [(ngModel)]="pelicula.imgUser" name="imgUser">
+    <input type="hidden" [(ngModel)]="pelicula.proposerId" name="imgUser">
     <!-- Botón para enviar el formulario -->
     <button  class="btn btn-primary" disabled>Enviar</button>
     <p class="text-danger fs-4 mt-3">En el modo demo el crear películas esta deshabilitado</p>

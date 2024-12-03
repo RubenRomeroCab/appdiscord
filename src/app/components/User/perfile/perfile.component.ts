@@ -25,14 +25,14 @@ export class PerfileComponent implements OnInit{
   }
 
   actualizarImg(img:string){
-    this.userService.actualizarImg(img);
+    // this.userService.actualizarImg(img);
     this.img='';
     this.mostrar= false;
   }
 
 
   actualizarName(name:string){
-    this.userService.actualizarNombre(name);
+    // this.userService.actualizarNombre(name);
   }
 
  
