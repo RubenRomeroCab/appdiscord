@@ -1,124 +1,100 @@
 import { Injectable } from '@angular/core';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updateProfile, User } from 'firebase/auth';
-import { Auth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AppUtils } from '../utils/AppUtils';
-
+import { AppUser } from '../models/appuser.model';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private userSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
 
-  //usamos Auth para 
   constructor(
     private auth: Auth,
-    private route: Router,
-    private _snackBar: MatSnackBar
+    private usersService: UsersService
   ) {
-    auth.onAuthStateChanged(user => {
-      this.userSubject.next(user);
-    })
+    // Listen to auth state changes
+    this.auth.onAuthStateChanged((user) => {
+      this.currentUserSubject.next(user);
+    });
   }
 
-  // Verificar si el usuario está autenticado
-  isAuthenticated(): boolean {
-    return this.auth.currentUser != null;
-  }
-
-  register(name: string, email: string, password: string) {
+  /**
+   * Register a new user with email and password.
+   * @param email - User's email address.
+   * @param password - User's chosen password.
+   */
+  register(name: string, email: string, password: string): Promise<AppUser | null> {
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-       const firebaseUser = userCredential.user;
-        updateProfile(firebaseUser, {
-          displayName: name
-        }).then(() => {
-          this._snackBar.open("Login correcto", undefined, AppUtils.snackBarSuccessConfig)
-          this.route.navigate(['login'])
-        }).catch((error) => {
-          console.log(error);
-        })
+        const user = userCredential.user;
+        if (user) {
+
+          updateProfile(user, { displayName: name });
+
+          const newUser: AppUser = {
+            id: user.uid,
+            reputation: 0,
+            likedGenres: {},
+          };
+
+          // Save user to Firestore
+          return this.usersService.saveUserToFirestore(newUser).then(() => newUser);
+        }
+
+        return null;
       })
       .catch((error) => {
-        console.log("Error al registrar Usuario ", error.message)
-      })
+        console.error('Error during registration:', error);
+        throw error;
+      });
   }
 
-  login(email: string, password: string) {
+  /**
+   * Log in an existing user with email and password.
+   * @param email - User's email address.
+   * @param password - User's password.
+   */
+  login(email: string, password: string): Promise<User | null> {
     return signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const firebaseUser = userCredential.user;
-        userCredential.user.getIdToken().then((idToken) => {
-          localStorage.setItem('token', idToken);
-        }).catch((error) => {
-          console.log(error.message)
-        })
-
-        console.log("USUARIO LOGEADO")
-        console.log(firebaseUser)
-        this.route.navigate(['home'])
-      })
+      .then((userCredential) => userCredential.user)
       .catch((error) => {
-        console.log(error);
-      })
+        console.error('Error during login:', error);
+        throw error;
+      });
   }
 
-  logout() {
-    signOut(this.auth)
-      .then(() => {
-        console.log("Fuera de la app")
-        this.route.navigate(['login'])
-      })
-      .catch((error) => {
-        console.log(error.message)
-      })
+  /**
+   * Log out the current user.
+   */
+  logout(): Promise<void> {
+    return signOut(this.auth).catch((error) => {
+      console.error('Error during logout:', error);
+      throw error;
+    });
   }
 
-  getUser() {
-    return this.userSubject.value;
+  /**
+   * Get the current logged-in user.
+   */
+  getCurrentUser(): User | null {
+    return this.auth.currentUser;
   }
 
-
-  actualizarImg(img:string){
-    if(img && this.auth.currentUser){
-      updateProfile(this.auth.currentUser, {photoURL:img})
-      .then(()=>{
-        console.log("IMG ACTUALIZADA")
-      })
-      .catch((error)=>{
-        console.log(error)
-      })
-    }
+  /**
+   * Observe the current user as an observable.
+   */
+  getCurrentUserObservable() {
+    return this.currentUserSubject.asObservable();
   }
 
-  actualizarNombre(nombre: string): void {
-    const user = this.auth.currentUser;
-    if (user) {
-      updateProfile(user, { displayName: nombre })
-      .then(()=>{
-        console.log("Correo actualizado");
-      })
-      .catch((erorr)=>{
-        console.log(erorr);
-      })
-    }
+  /**
+   * Check if a user is authenticated.
+   */
+  isAuthenticated(): boolean {
+    return this.auth.currentUser !== null;
   }
 
-  actualizarEmail(email: string): void {
-    const user = this.auth.currentUser;
-    if (user) {
-      updateEmail(user, email)
-        .then(() => {
-          console.log('Correo actualizado correctamente');
-        })
-        .catch(error => {
-          console.error('Error al actualizar el correo:', error);
-        });
-    }
-  }
-  
 }

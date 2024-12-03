@@ -3,7 +3,6 @@ import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { User } from 'firebase/auth';
 import { Router, RouterLink } from '@angular/router';
-import { PeliculaModel } from '../../../models/pelicula.model';
 import { PeliculasService } from '../../../services/peliculas.service';
 
 @Component({

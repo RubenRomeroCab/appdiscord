@@ -1,29 +1,27 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { PeliculaModel } from '../../../models/pelicula.model';
+import { Movie } from '../../../models/movie.model';
 import { PeliculasService } from '../../../services/peliculas.service';
 import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
-import { UsuarioModel } from '../../../models/usuario.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-peliculas',
   standalone: true,
-  imports: [FormsModule,RouterLink,CommonModule],
+  imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './create-peliculas.component.html',
   styleUrl: './create-peliculas.component.scss'
 })
 export class CreatePeliculasComponent {
 
-  user!:UsuarioModel| null
-  pelicula!:PeliculaModel
-  
-  constructor(private serviceMovies:PeliculasService,
-              private serviceUser:AuthService
-  ){
+  pelicula!: Movie
 
-    this.pelicula = {nombre:'',descripcion:'',img:'',trailer:'',genre:'', proposer_id:0, status:'', created_at: new Date,total_votes:0,average_rating:0, is_next_watch:false,idUser:'',imgUser:''};
+  constructor(
+    private serviceMovies: PeliculasService,
+    private serviceUser: AuthService
+  ) {
+
   }
 
 
@@ -33,33 +31,36 @@ export class CreatePeliculasComponent {
   }
 
 
-  subir(form:NgForm){
-    console.log(form.value);  
-    if(form.invalid){
+  subir(form: NgForm) {
+    console.log(form.value);
+    if (form.invalid) {
       return
-    }else{
-      if (!this.esYoutubeUrl(this.pelicula.trailer)) {
-        console.log('La URL del tráiler no es válida.');
-        return;
+    } else {
+      if (this.pelicula.trailer) {
+        if (!this.esYoutubeUrl(this.pelicula.trailer)) {
+          console.log('La URL del tráiler no es válida.');
+          return;
+        }
       }
+
       //usamos esto para quitar el id de this.pelicula ya que firebase no acepta valores vacios o no definidos 
       //como el id no lo tenemos hasta que se crea por eso lo hacemos asi 
-      
-     
-      const peliculaData ={...this.pelicula};
+
+
+      const peliculaData = { ...this.pelicula };
       delete peliculaData.id;
 
-    
-      this.serviceMovies.addMovies(peliculaData)
-      .then(()=>{
-        console.log("pelicula agregada")
-        form.resetForm;
-      })
-      .catch((error)=>{
-        console.log(error.message)
 
-        
-      })
+      this.serviceMovies.addMovies(peliculaData)
+        .then(() => {
+          console.log("pelicula agregada")
+          form.resetForm;
+        })
+        .catch((error) => {
+          console.log(error.message)
+
+
+        })
     }
   }
 }

@@ -20,7 +20,7 @@ export class LoginComponent {
   loginForm: FormGroup;
 
   constructor(
-    private serviceUser: AuthService,
+    private authService: AuthService,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar
   ) {
@@ -33,7 +33,12 @@ export class LoginComponent {
   login() {
     if (this.loginForm.valid) {
       AppUtils.digestString(this.loginForm.get('password')?.value, (hashedPass: string) => {
-        this.serviceUser.login(this.loginForm.get('email')?.value, hashedPass);
+        this.authService.login(this.loginForm.get('email')?.value, hashedPass).then((user) => {
+          this._snackBar.open("Logueado!", undefined, AppUtils.snackBarSuccessConfig);
+        }).catch((error) => {
+          console.error('Error during login:', error);
+          this._snackBar.open("Error durante el login", undefined, AppUtils.snackBarErrorConfig);
+        });
       });     
     } else {
       this._snackBar.open("Error en el formulario", undefined, AppUtils.snackBarErrorConfig);
