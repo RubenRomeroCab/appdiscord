@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PeliculasService } from '../../../services/peliculas.service';
 import { ActivatedRoute } from '@angular/router';
-import { PeliculaModel } from '../../../models/peliculas.model';
+import { PeliculaModel } from '../../../models/pelicula.model';
 import { DomseguroPipe } from '../../../pipes/domseguro.pipe';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
