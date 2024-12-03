@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collectionData, docData, Firestore } from '@angular/fire/firestore';
 import { collection, doc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { PeliculaModel } from '../models/peliculas.model';
+import { PeliculaModel } from '../models/pelicula.model';
 
 
 @Injectable({

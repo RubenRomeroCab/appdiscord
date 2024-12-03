@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updateProfile, User } from 'firebase/auth';
-import { UsuarioModel } from '../models/usuario.model';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppUtils } from '../utils/AppUtils';
 
 
 @Injectable({
@@ -13,15 +13,12 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
 
   private userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
-
-
-  user!: User
-  currentUser!: User | null;
 
   //usamos Auth para 
-  constructor(private auth: Auth,
-    private route: Router
+  constructor(
+    private auth: Auth,
+    private route: Router,
+    private _snackBar: MatSnackBar
   ) {
     auth.onAuthStateChanged(user => {
       this.userSubject.next(user);
@@ -33,16 +30,14 @@ export class AuthService {
     return this.auth.currentUser != null;
   }
 
-
-  register(usuario: UsuarioModel) {
-    return createUserWithEmailAndPassword(this.auth, usuario.email, usuario.password)
+  register(name: string, email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        this.user = userCredential.user;
-        console.log("Usuario creado con exito");
-        updateProfile(this.user, {
-          displayName: usuario.name
+       const firebaseUser = userCredential.user;
+        updateProfile(firebaseUser, {
+          displayName: name
         }).then(() => {
-          console.log("Usuario registrado con nombre");
+          this._snackBar.open("Login correcto", undefined, AppUtils.snackBarSuccessConfig)
           this.route.navigate(['login'])
         }).catch((error) => {
           console.log(error);
@@ -53,10 +48,10 @@ export class AuthService {
       })
   }
 
-  login(usuario: UsuarioModel) {
-    return signInWithEmailAndPassword(this.auth, usuario.email, usuario.password)
+  login(email: string, password: string) {
+    return signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        this.user = userCredential.user;
+        const firebaseUser = userCredential.user;
         userCredential.user.getIdToken().then((idToken) => {
           localStorage.setItem('token', idToken);
         }).catch((error) => {
@@ -64,14 +59,13 @@ export class AuthService {
         })
 
         console.log("USUARIO LOGEADO")
-        console.log(this.user)
+        console.log(firebaseUser)
         this.route.navigate(['home'])
       })
       .catch((error) => {
         console.log(error);
       })
   }
-
 
   logout() {
     signOut(this.auth)
@@ -99,8 +93,8 @@ export class AuthService {
         console.log(error)
       })
     }
-    
   }
+
   actualizarNombre(nombre: string): void {
     const user = this.auth.currentUser;
     if (user) {

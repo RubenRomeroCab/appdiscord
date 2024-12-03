@@ -1,26 +1,53 @@
 import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { UsuarioModel } from '../../../models/usuario.model';
 import { AuthService } from '../../../services/auth.service';
+import { AppUtils } from '../../../utils/AppUtils';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
 
-  usuario:UsuarioModel
-  constructor(private serviceUser : AuthService){
-    this.usuario= new UsuarioModel
+  registerForm: FormGroup;
+
+  constructor(
+    private serviceUser: AuthService,
+    private fb: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {
+    this.registerForm = this.fb.group({
+      // Identificación y nombre
+      name: ['', [Validators.required]],
+
+      email: ['', [Validators.required, Validators.email]],
+
+      password: ['', [Validators.required]],
+
+      // Términos y condiciones
+      // terms: [false, [Validators.requiredTrue]],
+    });
   }
 
 
-  registrar(form:NgForm){
-    this.serviceUser.register(this.usuario);
+  register() {
+    if (this.registerForm.valid) {
+      AppUtils.digestString(this.registerForm.get('password')?.value, (hashedPass: string) => {
+        this.serviceUser.register(this.registerForm.get('name')?.value, this.registerForm.get('email')?.value, hashedPass);
+        
+      });     
+    } else {
+      this._snackBar.open("Error en el formulario", undefined, AppUtils.snackBarErrorConfig);
+    }
   }
 
 }

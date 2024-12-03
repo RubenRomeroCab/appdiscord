@@ -21,10 +21,7 @@ export class PerfileComponent implements OnInit{
     
   }
   ngOnInit(): void {
-    this.userService.user$.subscribe(user=>{
-      this.user=user
-      console.log(this.user)
-    });
+   
   }
 
   actualizarImg(img:string){

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { PeliculaModel } from '../../../models/peliculas.model';
+import { PeliculaModel } from '../../../models/pelicula.model';
 import { PeliculasService } from '../../../services/peliculas.service';
 import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
@@ -22,11 +22,8 @@ export class CreatePeliculasComponent {
   constructor(private serviceMovies:PeliculasService,
               private serviceUser:AuthService
   ){
+
     this.pelicula = {nombre:'',descripcion:'',img:'',trailer:'',genre:'', proposer_id:0, status:'', created_at: new Date,total_votes:0,average_rating:0, is_next_watch:false,idUser:'',imgUser:''};
-    this.serviceUser.user$.subscribe((data:any) =>{
-      this.pelicula.idUser = data.displayName;
-      this.pelicula.imgUser= data.photoURL;
-    })
   }
 
 
