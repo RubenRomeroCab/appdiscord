@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { UsuarioModel } from '../../../models/usuario.model';
 import { AuthService } from '../../../services/auth.service';
 import { AppUtils } from '../../../utils/AppUtils';
 import { MatSnackBar } from '@angular/material/snack-bar';
