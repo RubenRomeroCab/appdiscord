@@ -23,10 +23,6 @@ export class CreatePeliculasComponent {
               private serviceUser:AuthService
   ){
     this.pelicula= new PeliculaModel;
-    this.serviceUser.user$.subscribe((data:any) =>{
-      this.pelicula.idUser = data.displayName;
-      this.pelicula.imgUser= data.photoURL;
-    })
   }
 
 

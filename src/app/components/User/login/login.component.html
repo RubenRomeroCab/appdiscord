@@ -1,33 +1,27 @@
 <div class="container">
 
-<h1 class="text-center">Login</h1>
+    <h1 class="text-center">Login</h1>
 
-<form (ngSubmit)="enviar(formLogin)"  
-#formLogin="ngForm"
-class="text-center">
+    <form (ngSubmit)="login()" class="text-center" [formGroup]="loginForm">
 
-    <div class="mt-3">
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" class="form-control" placeholder="Introduce tu Email" [(ngModel)]="usuario.email">
-    </div>
+        <div class="mt-3">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Introduce tu Email"
+                formControlName="email">
+        </div>
 
-    <div class="mt-3">
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" placeholder="Introduce tu Password" class="form-control" [(ngModel)]="usuario.password">
-    </div>
+        <div class="mt-3">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Introduce tu Password"
+                class="form-control" formControlName="password">
+        </div>
 
-    <div class="mt-3">
-        
-    <input type="checkbox" name="recordarUser" id="recordarUser" [(ngModel)]="recordarUser">
-    <label class="ms-2" for="recordarUser">Recordar Usuario</label>
-        <a class="ms-3 text-decoration-none" [routerLink]="['/register']" >¿No tienes cuenta? / Register</a>
-    </div>
+        <div class="mt-3">
+            <a class="ms-3 text-decoration-none" [routerLink]="['/register']">¿No tienes cuenta? / Register</a>
+        </div>
 
-
-    <div class="mt-4">
-    <button class="btn btn-primary" type="submit">Enviar</button>
-    </div>
-
-</form>
-
+        <div class="mt-4">
+            <button class="btn btn-primary" type="submit">Enviar</button>
+        </div>
+    </form>
 </div>

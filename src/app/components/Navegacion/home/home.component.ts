@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit{
               private peliculasService:PeliculasService ,
               private router:Router
   ) {
-    this.user = this.userService.user;
   }
   ngOnInit(): void {
     console.log("Estamos en el component home")

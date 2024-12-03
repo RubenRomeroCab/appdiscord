@@ -1,46 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
-import { UsuarioModel } from '../../../models/usuario.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppUtils } from '../../../utils/AppUtils';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [
+    RouterLink, 
+    ReactiveFormsModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-  usuario: UsuarioModel;
-  recordarUser: boolean = false;
+  loginForm: FormGroup;
 
-  constructor(private userService: AuthService) {
-    this.usuario = new UsuarioModel;
+  constructor(
+    private serviceUser: AuthService,
+    private fb: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
   }
 
-  ngOnInit(): void {
-    if (localStorage.getItem('email')) {
-      const email = localStorage.getItem('email');
-      if (email) {
-        this.usuario.email = email
-        this.recordarUser = true
-      }
-    };
-  }
-
-
-
-  enviar(form: NgForm) {
-    if (form.invalid) {
-      console.log("Datos no validos")
-    }
-    this.userService.login(this.usuario);
-    if (this.recordarUser) {
-      localStorage.setItem('email', this.usuario.email);
-    }else{
-      localStorage.removeItem('email');
+  login() {
+    if (this.loginForm.valid) {
+      AppUtils.digestString(this.loginForm.get('password')?.value, (hashedPass: string) => {
+        this.serviceUser.login(this.loginForm.get('email')?.value, hashedPass);
+      });     
+    } else {
+      this._snackBar.open("Error en el formulario", undefined, AppUtils.snackBarErrorConfig);
     }
   }
 
