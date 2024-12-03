@@ -20,20 +20,17 @@
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['perfile']">Perfil</a>
           </li>
-
-         
-          
-         
         </ul>
         <div class="d-flex  aling-items-center justify-content-center ">
-     <button (click)="salir()" class="btn btn-outline-primary " >Salir</button>
-     </div>
+          <button *ngIf="!user" (click)="login()" class="btn btn-outline-primary ">Entrar</button>
+          <button *ngIf="user" (click)="logout()" class="btn btn-outline-primary ">Salir</button>
+        </div>
 
-       <!--<form class="d-flex" role="search">
+        <!--<form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>--> 
-      
+        </form>-->
+
       </div>
     </div>
   </nav>
