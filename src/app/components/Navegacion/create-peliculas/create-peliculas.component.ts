@@ -16,13 +16,13 @@ import { CommonModule } from '@angular/common';
 })
 export class CreatePeliculasComponent {
 
-  user!:any | null
+  user!:UsuarioModel| null
   pelicula!:PeliculaModel
   
   constructor(private serviceMovies:PeliculasService,
               private serviceUser:AuthService
   ){
-    this.pelicula= new PeliculaModel;
+    this.pelicula = {nombre:'',descripcion:'',img:'',trailer:'',genre:'', proposer_id:0, status:'', created_at: new Date,total_votes:0,average_rating:0, is_next_watch:false,idUser:'',imgUser:''};
     this.serviceUser.user$.subscribe((data:any) =>{
       this.pelicula.idUser = data.displayName;
       this.pelicula.imgUser= data.photoURL;
@@ -60,6 +60,8 @@ export class CreatePeliculasComponent {
       })
       .catch((error)=>{
         console.log(error.message)
+
+        
       })
     }
   }

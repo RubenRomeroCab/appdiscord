@@ -1,5 +1,7 @@
-export class UsuarioModel{
+export interface UsuarioModel{
     name?:string;
-    email!:string;
-    password!:string;
+    email?:string;
+   avatar?:string;
+   reputacion?:number;
+   liked?:number;
 }
