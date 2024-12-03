@@ -38,11 +38,10 @@ export class RegisterComponent {
     });
   }
 
-
   register() {
     if (this.registerForm.valid) {
       AppUtils.digestString(this.registerForm.get('password')?.value, (hashedPass: string) => {
-        this.authService.register(this.registerForm.get('email')?.value, hashedPass).then((user) => {
+        this.authService.register(this.registerForm.get('name')?.value, this.registerForm.get('email')?.value, hashedPass).then(() => {
           this._snackBar.open("Usuario registrado", undefined, AppUtils.snackBarSuccessConfig);
           this.router.navigate(['login']);
         }).catch((error) => {

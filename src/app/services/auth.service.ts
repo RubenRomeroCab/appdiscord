@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updateProfile, User } from 'firebase/auth';
-import { Auth } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
+import { AppUser } from '../models/appuser.model';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
   constructor(
-    private auth: Auth
+    private auth: Auth,
+    private usersService: UsersService
   ) {
     // Listen to auth state changes
     this.auth.onAuthStateChanged((user) => {
@@ -24,9 +26,26 @@ export class AuthService {
    * @param email - User's email address.
    * @param password - User's chosen password.
    */
-  register(email: string, password: string): Promise<User | null> {
+  register(name: string, email: string, password: string): Promise<AppUser | null> {
     return createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => userCredential.user)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+
+          updateProfile(user, { displayName: name });
+
+          const newUser: AppUser = {
+            id: user.uid,
+            reputation: 0,
+            likedGenres: {},
+          };
+
+          // Save user to Firestore
+          return this.usersService.saveUserToFirestore(newUser).then(() => newUser);
+        }
+
+        return null;
+      })
       .catch((error) => {
         console.error('Error during registration:', error);
         throw error;
