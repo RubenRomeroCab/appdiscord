@@ -38,7 +38,7 @@
             <h5 class="card-title">{{ movie.name }}</h5>
             <p class="card-text">{{ movie.description | slice:0:200 }}</p>
             <p class="fw-bold">{{ movie.genre }}</p>
-            <button class="btn btn-primary" (click)="showMovieDetail(movie?.id)">Ver Película</button>
+            <button class="btn btn-primary" (click)="showMovieDetail(movie.id)">Ver Película</button>
           </div>
         </div>
       </div>

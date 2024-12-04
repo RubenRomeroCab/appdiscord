@@ -12,9 +12,11 @@ import { VotesService } from '../../../services/votes.service';
 export class ScoredMovie extends Movie {
   score: number;
 
+
   constructor(data: Partial<ScoredMovie>) {
     super(data);
     this.score = data.score || 0;
+    this.id= data.id;
   }
 }
 
@@ -32,6 +34,7 @@ export class HomeComponent {
   users: AppUser[] = []; // List of all users
   selectedUsers: Set<string> = new Set(); // Track selected user IDs
 
+
   AppUtils = AppUtils;
 
   constructor(
@@ -46,12 +49,14 @@ export class HomeComponent {
     this.loadSelectedUsers();
     this.loadUsers();
     this.generateRecommendations();
+    
   }
 
   loadUsers(): void {
     this.userService.getAllUsers().subscribe(
       (users) => {
         this.users = users;
+        console.log(users)
       },
       (error) => {
         console.error('Error fetching users:', error);
@@ -73,8 +78,8 @@ export class HomeComponent {
     return this.selectedUsers.has(userId);
   }
 
-  showMovieDetail(id: string | undefined): void {
-    this.router.navigate([`/pelicula-detail/${id}`]);
+  showMovieDetail(idMovie: string | undefined): void {
+    this.router.navigate([`/pelicula-detail/${idMovie}`]);
   }
 
   saveSelectedUsers(): void {
@@ -133,6 +138,9 @@ export class HomeComponent {
   
         // Obtener todas las películas
         this.moviesService.getAllMovies().subscribe((movies) => {
+         
+  
+          
           // Crear instancias de ScoredMovie con la combinación de puntuaciones
           const scoredMovies = movies.map((movie) => {
             const voteScore = voteScores[movie.id || ''] || 0;
@@ -153,6 +161,7 @@ export class HomeComponent {
           // Limitar el número de películas si es necesario
           const maxMoviesToShow = 5;
           this.recommendedMovies = bestMovies.slice(0, maxMoviesToShow);
+          console.log(this.recommendedMovies)
         });
       })
       .catch((error) => {
