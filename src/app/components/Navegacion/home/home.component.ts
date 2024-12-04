@@ -16,7 +16,7 @@ export class ScoredMovie extends Movie {
   constructor(data: Partial<ScoredMovie>) {
     super(data);
     this.score = data.score || 0;
-    this.id= data.id;
+    this.id = data.id;
   }
 }
 
@@ -162,7 +162,6 @@ export class HomeComponent {
           // Limitar el número de películas si es necesario
           const maxMoviesToShow = 5;
           this.recommendedMovies = bestMovies.slice(0, maxMoviesToShow);
-          console.log(this.recommendedMovies)
         });
       })
       .catch((error) => {

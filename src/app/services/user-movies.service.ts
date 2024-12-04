@@ -20,7 +20,7 @@ export class UserMoviesService {
 
   private collectionName = 'user_movies';
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) { }
 
   // Crear o actualizar un UserMovie
   addOrUpdateUserMovie(userMovie: Omit<UserMovie, 'id'>): Observable<string> {
@@ -50,7 +50,7 @@ export class UserMoviesService {
   getUserMovie(userId: string, movieId: string): Observable<UserMovie | null> {
     const userMoviesCollection = collection(this.firestore, this.collectionName) as CollectionReference<UserMovie>;
     const q = query(userMoviesCollection, where('userId', '==', userId), where('movieId', '==', movieId));
-    
+
     return from(getDocs(q)).pipe(
       map((querySnapshot) => {
         if (!querySnapshot.empty) {
@@ -63,6 +63,20 @@ export class UserMoviesService {
         console.error('Error fetching user movie:', error);
         return of(null); // Emitir un valor nulo si hay un error
       })
+    );
+  }
+
+  getUserMoviesByMovieId(movieId: string | undefined): Observable<UserMovie[]> {
+    const userMoviesCollection = collection(this.firestore, this.collectionName) as CollectionReference<UserMovie>;
+    const q = query(userMoviesCollection, where('movieId', '==', movieId));
+
+    return from(getDocs(q)).pipe(
+      map((querySnapshot) =>
+        querySnapshot.docs.map((doc) => {
+          const data = doc.data() as UserMovie;
+          return { ...data, id: doc.id };
+        })
+      )
     );
   }
 }

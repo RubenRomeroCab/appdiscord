@@ -126,19 +126,19 @@ export class MoviesComponent implements OnInit {
                 this.applyFilters();
               },
               error: (err) => {
-                console.log('Error deleting movie:', err);
+                console.error('Error deleting movie:', err);
               },
             });
           } else {
-            console.log('User not authenticated, cannot delete movie');
+            console.error('User not authenticated, cannot delete movie');
           }
         },
         error: (err) => {
-          console.log('Error fetching authenticated user:', err);
+          console.error('Error fetching authenticated user:', err);
         },
       });
     } else {
-      console.log('Movie ID is undefined, cannot delete');
+      console.error('Movie ID is undefined, cannot delete');
     }
   }
 

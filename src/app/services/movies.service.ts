@@ -104,12 +104,25 @@ export class MoviesService {
     const moviesCollection = collection(this.firestore, this.collectionName) as CollectionReference<Movie>;
 
     return from(getDocs(moviesCollection)).pipe(
-        map((querySnapshot) =>
-            querySnapshot.docs.map((doc) => 
-                Movie.fromFirestore(doc.id, doc.data() as Movie)
-            )
+      map((querySnapshot) =>
+        querySnapshot.docs.map((doc) =>
+          Movie.fromFirestore(doc.id, doc.data() as Movie)
         )
+      )
     );
-}
+  }
+
+  getAllMoviesByUserId(userId: string): Observable<Movie[]> {
+    const moviesCollection = collection(this.firestore, this.collectionName) as CollectionReference<Movie>;
+    const q = query(moviesCollection, where('proposerId', '==', userId));
+
+    return from(getDocs(q)).pipe(
+      map((querySnapshot) =>
+        querySnapshot.docs.map((doc) =>
+          Movie.fromFirestore(doc.id, doc.data() as Movie)
+        )
+      )
+    );
+  }
 
 }
