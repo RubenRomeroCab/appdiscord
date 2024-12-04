@@ -33,7 +33,7 @@ export class ProfileComponent {
       reputation: [{ value: 0, disabled: true }],
       likedGenres: [{ value: {}, disabled: true }]
     });
-   }
+  }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -46,13 +46,22 @@ export class ProfileComponent {
       this.usersService.getUserById(firebaseUser.uid).subscribe((appUser) => {
         this.user = appUser || null;
 
-        // Inicializar el formulario con los datos del usuario
-        this.profileForm = this.fb.group({
-          name: [appUser?.name || '', [Validators.required, Validators.minLength(3)]],
-          avatar: [appUser?.avatar || '', [Validators.pattern(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/)]],
-          reputation: [{ value: appUser?.reputation || 0, disabled: true }],
-          likedGenres: [{ value: appUser?.likedGenres || {}, disabled: true }]
-        });
+        if (this.user) {
+          this.usersService.calculateReputation(this.user.id).subscribe((reputation) => {
+            if (this.user) {
+              this.user.reputation = reputation;
+              // Inicializar el formulario con los datos del usuario
+              this.profileForm = this.fb.group({
+                name: [appUser?.name || '', [Validators.required, Validators.minLength(3)]],
+                avatar: [appUser?.avatar || '', [Validators.pattern(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/)]],
+                reputation: [{ value: this.user?.reputation || 0, disabled: true }],
+                likedGenres: [{ value: appUser?.likedGenres || {}, disabled: true }]
+              });
+            }
+          });
+        }
+
+        
       });
     });
   }
