@@ -1,0 +1,33 @@
+<div class="container mt-4">
+    <h2>User Profile</h2>
+  
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input id="name" class="form-control" formControlName="name" />
+        <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="text-danger">
+          Name is required and must be at least 3 characters.
+        </div>
+      </div>
+  
+      <!-- <div class="mb-3">
+        <label for="avatar" class="form-label">Avatar URL</label>
+        <input id="avatar" class="form-control" formControlName="avatar" />
+        <div *ngIf="profileForm.get('avatar')?.invalid && profileForm.get('avatar')?.touched" class="text-danger">
+          Must be a valid image URL.
+        </div>
+      </div> -->
+  
+      <div class="mb-3">
+        <label class="form-label">Reputation</label>
+        <input class="form-control" [value]="user?.reputation || 0" disabled />
+      </div>
+  
+      <div class="mb-3">
+        <label class="form-label">Liked Genres</label>
+        <pre>{{ user?.likedGenres | json }}</pre>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Save Changes</button>
+    </form>
+  </div>

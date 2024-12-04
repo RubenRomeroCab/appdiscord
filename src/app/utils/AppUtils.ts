@@ -76,4 +76,11 @@ export abstract class AppUtils {
     return match ? match[1] : null;
   }
 
+  public static cortarTexto(texto: string, longitudMaxima: number): string {
+    if (texto.length > longitudMaxima) {
+      return texto.substring(0, longitudMaxima) + "...";  // Cortar y agregar "..."
+    }
+    return texto;  // Si el texto es corto, devuélvelo tal cual
+  }
+
 }

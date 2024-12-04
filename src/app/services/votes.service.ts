@@ -84,6 +84,12 @@ export class VotesService {
     return from(deleteDoc(voteDoc));
   }
 
+  getVotesByUser(userId: string): Observable<Vote[]> {
+    const votesCollection = collection(this.firestore, 'votes') as CollectionReference<DocumentData>;
+    const q = query(votesCollection, where('userId', '==', userId));
+    return collectionData(q, { idField: 'id' }) as Observable<Vote[]>;
+  }
+
   /**
    * Get votes for a movie.
    * @param movieId - ID of the movie to fetch votes for.

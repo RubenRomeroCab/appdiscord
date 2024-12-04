@@ -2,3 +2,9 @@
     height: 500px; /* Altura fija para todas las imágenes */
     object-fit: cover; /* Ajusta la imagen sin distorsión */
   }
+
+  .users-list .btn.selected {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+  }

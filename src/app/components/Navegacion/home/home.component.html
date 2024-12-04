@@ -8,7 +8,8 @@
             ver juntos en Discord. ¡Únete a la diversión, comparte tus favoritos y ayuda a elegir la mejor opción!
         </p>
         <div class="d-inline-flex gap-2 mb-5">
-            <a [routerLink]="['/peliculas']"   class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+            <a [routerLink]="['/peliculas']"
+                class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
                 Votar ahora
             </a>
             <button [routerLink]="['/create']" class="btn btn-primary btn-lg px-4 rounded-pill" type="button">
@@ -17,24 +18,29 @@
         </div>
     </div>
 
-    <h2 class="text-center">Las Peliculas De Esta Semana</h2>
+    <!-- Lista de usuarios -->
+    <div class="users-list">
+        <h3>Usuarios:</h3>
+        <div class="d-flex flex-wrap gap-2">
+            <button *ngFor="let user of users" [class.selected]="isUserSelected(user.id)"
+                (click)="toggleUserSelection(user.id)" class="btn btn-outline-primary">
+                {{ user.name }}
+            </button>
+        </div>
+    </div>
 
+    <h2 class="text-center mt-5">Películas Recomendadas</h2>
     <div class="row">
-        @for (pelicula of peliculas; track $index) {
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <div class="card text-center mt-4">
-                <img [src]="pelicula.img" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">{{pelicula.nombre}}</h5>
-                  <p class="card-text">{{cortarTexto(pelicula.descripcion,200)}}</p>
-                  <p class="fw-bold">
-                     <img class="rounded-circle" [src]="pelicula.imgUser"  alt="" width="30px" height="30px">
-                     {{pelicula.idUser}}
-                  </p>
-                    <button *ngIf="pelicula.id" (click)="verPeliculaDetail(pelicula.id)" class="btn btn-primary">Ver Pelicula</button>
-                </div>
-              </div>
-            </div>
-            }
+      <div *ngFor="let movie of recommendedMovies" class="col-sm-12 col-md-6 col-lg-4">
+        <div class="card text-center mt-4">
+            <img src="{{movie.image}}" class="card-img-top" alt="{{movie.name}}" (error)="onImageError($event)">
+          <div class="card-body">
+            <h5 class="card-title">{{ movie.name }}</h5>
+            <p class="card-text">{{ movie.description | slice:0:200 }}</p>
+            <p class="fw-bold">{{ movie.genre }}</p>
+            <button class="btn btn-primary" (click)="showMovieDetail(movie?.id)">Ver Película</button>
+          </div>
+        </div>
+      </div>
     </div>
 </div>

@@ -49,14 +49,15 @@
 
     <!-- Campo para el tráiler de la película -->
     <label for="genre">Genero</label>
-    <input 
-      type="text" 
-      placeholder="Ingresa el genero" 
-      id="trailer" 
-      name="trailer" 
+    <select 
+      id="genre" 
+      name="genre" 
       class="form-control mb-3" 
+      required 
       formControlName="genre"
     >
+      <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+    </select>
   
     <!-- Botón para enviar el formulario -->
     <button  class="btn btn-primary">Enviar</button>
