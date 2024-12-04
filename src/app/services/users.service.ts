@@ -16,7 +16,7 @@ export class UsersService {
     private firestore: Firestore,
     private moviesService: MoviesService,
     private userMoviesService: UserMoviesService
-  ) {}
+  ) { }
 
   /**
    * Save a new user to Firestore.
@@ -58,22 +58,21 @@ export class UsersService {
     if (userId) {
       return this.moviesService.getAllMoviesByUserId(userId).pipe(
         switchMap((movies) => {
-            const movieIds = movies.map((movie) => movie.id);
-            const reputationObservables = movieIds.map((movieId) => 
-                this.userMoviesService.getUserMoviesByMovieId(movieId).pipe(
-                    map((userMovies) => userMovies.reduce((sum, userMovie) => sum + (userMovie.rating || 0), 0))
-                )
-            );
+          const movieIds = movies.map((movie) => movie.id);
+          const reputationObservables = movieIds.map((movieId) =>
+            this.userMoviesService.getUserMoviesByMovieId(movieId).pipe(
+              map((userMovies) => userMovies.reduce((sum, userMovie) => sum + (userMovie.rating || 0), 0))
+            )
+          );
 
-            // Combine all observables and sum the reputations
-            return forkJoin(reputationObservables).pipe(
-                map((reputations) => reputations.reduce((total, rep) => total + rep, 0))
-            );
+          // Combine all observables and sum the reputations
+          return forkJoin(reputationObservables).pipe(
+            map((reputations) => reputations.reduce((total, rep) => total + rep, 0))
+          );
         })
-    );
-    } else{
+      );
+    } else {
       return new Observable
     }
-    
-}
+  }
 }

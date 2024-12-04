@@ -49,7 +49,7 @@ export class HomeComponent {
     this.loadSelectedUsers();
     this.loadUsers();
     this.generateRecommendations();
-    
+
   }
 
   loadUsers(): void {
@@ -93,76 +93,93 @@ export class HomeComponent {
   }
 
   generateRecommendations(): void {
+    // Si no hay usuarios seleccionados, no se puede generar ninguna recomendación
     if (this.selectedUsers.size === 0) {
-      this.recommendedMovies = [];
-      return;
+      this.recommendedMovies = []; // Vaciar la lista de recomendaciones
+      return; // Salir de la función
     }
-  
+
+    // Convertimos los IDs de los usuarios seleccionados en un array
     const userIds = Array.from(this.selectedUsers);
-  
-    // Obtener preferencias de género y votos de los usuarios seleccionados
-    Promise.all([
-      Promise.all(
-        userIds.map((userId) =>
-          firstValueFrom(
-            this.usersService.getUserById(userId)
-          ).then((user) => ({
-            userId,
-            likedGenres: user?.likedGenres || {},
-          }))
+
+    // Promesa para obtener todos los votos de los usuarios seleccionados
+    Promise.all(
+      userIds.map((userId) =>
+        // Usamos `firstValueFrom` para convertir el Observable de votos en una promesa
+        firstValueFrom(
+          this.votesService.getVotesByUser(userId) // Obtiene los votos de cada usuario
         )
-      ),
-      Promise.all(
-        userIds.map((userId) =>
-          firstValueFrom(
-            this.votesService.getVotesByUser(userId) // Nueva función para obtener votos por usuario
-          )
-        )
-      ),
-    ])
-      .then(([userPreferences, userVotes]) => {
-        // Combinar las preferencias de género
-        const genreScores = userPreferences.reduce((acc, { likedGenres }) => {
-          for (const genre in likedGenres) {
-            acc[genre] = (acc[genre] || 0) + likedGenres[genre];
-          }
-          return acc;
-        }, {} as Record<string, number>);
-  
-        // Combinar los votos
+      )
+    )
+      .then((userVotes) => {
+        /**
+         * Combinar todos los votos de los usuarios en un único objeto
+         * - Cada película tendrá una puntuación acumulada según los votos.
+         * - Los "likes" suman 10 puntos, los "dislikes" restan 10 puntos.
+         */
         const voteScores = userVotes.flat().reduce((acc, vote) => {
           acc[vote.movieId] = (acc[vote.movieId] || 0) + (vote.voteType === 'like' ? 10 : -10);
-          return acc;
+          return acc; // Devolvemos el objeto acumulado
         }, {} as Record<string, number>);
-  
-        // Obtener todas las películas
+
+        // Obtener todas las películas disponibles en la base de datos
         this.moviesService.getAllMovies().subscribe((movies) => {
-         
-  
-          
-          // Crear instancias de ScoredMovie con la combinación de puntuaciones
-          const scoredMovies = movies.map((movie) => {
-            const voteScore = voteScores[movie.id || ''] || 0;
-            const genreScore = genreScores[movie.genre] || 0;
-  
-            // Ponderar votos (70%) y géneros (30%)
-            const totalScore = 0.7 * voteScore + 0.3 * genreScore;
-  
-            return new ScoredMovie({ ...movie, score: totalScore });
+          /**
+           * Para cada película, calculamos su puntuación combinando:
+           * - Los votos recibidos (likes/dislikes).
+           * - La reputación del usuario que propuso la película.
+           */
+          const movieScorePromises = movies.map((movie) =>
+            // Calculamos la reputación del usuario que propuso la película
+            firstValueFrom(this.usersService.calculateReputation(movie.proposerId)).then((reputation) => ({
+              movie, // Detalles de la película
+              score: voteScores[movie.id || ''] || 0, // Puntuación calculada a partir de los votos
+              proposerReputation: reputation || 0, // Reputación del proponente
+            }))
+          );
+
+          // Procesar las películas con sus puntuaciones calculadas
+          Promise.all(movieScorePromises).then((scoredMovies) => {
+            /**
+             * Ordenar las películas de mayor a menor puntaje:
+             * 1. Por puntaje total (likes/dislikes).
+             * 2. En caso de empate, por la reputación del proponente.
+             */
+            const sortedMovies = scoredMovies
+              .sort((a, b) => {
+                if (b.score === a.score) {
+                  // Si los puntajes son iguales, usamos la reputación como desempate
+                  return b.proposerReputation - a.proposerReputation;
+                }
+                return b.score - a.score; // Ordenar de mayor a menor por puntaje
+              });
+
+            /**
+             * Filtrar las películas con puntajes positivos (relevantes)
+             * - Sólo se consideran las películas con un puntaje mayor a 0.
+             */
+            const positiveMovies = sortedMovies.filter((item) => item.score > 0);
+
+            if (positiveMovies.length > 0) {
+              // Si hay películas con puntaje positivo:
+              // - Seleccionamos hasta un máximo de 5 películas para mostrar
+              const maxMoviesToShow = 5;
+              this.recommendedMovies = positiveMovies
+                .slice(0, maxMoviesToShow) // Limitar la cantidad de resultados
+                .map((item) => new ScoredMovie({ ...item.movie, score: item.score })); // Crear objetos ScoredMovie
+            } else {
+              // Si todas las películas tienen puntajes negativos:
+              // - Seleccionamos la mejor opción (la de mayor puntaje negativo o empate)
+              const bestMovie = sortedMovies[0]; // La primera película ordenada
+              this.recommendedMovies = bestMovie
+                ? [new ScoredMovie({ ...bestMovie.movie, score: bestMovie.score })] // Mostrar una película
+                : []; // Si no hay películas, la lista queda vacía
+            }
           });
-  
-          // Obtener el puntaje más alto
-          const maxScore = Math.max(...scoredMovies.map((movie) => movie.score), 0);
-  
-          // Filtrar películas con el puntaje más alto
-          const bestMovies = scoredMovies.filter((movie) => movie.score === maxScore);
-  
-          // Limitar el número de películas si es necesario
-          const maxMoviesToShow = 5;
-          this.recommendedMovies = bestMovies.slice(0, maxMoviesToShow);
         });
       })
       .catch((error) => {
+        // Manejo de errores si algo falla durante el proceso
         console.error('Error generating recommendations:', error);
       });
   }
