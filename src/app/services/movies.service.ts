@@ -10,7 +10,7 @@ export class MoviesService {
 
   private collectionName = 'movies';
 
-  private pageSize = 5;
+  private pageSize = 100;
 
   constructor(private firestore: Firestore) { }
 

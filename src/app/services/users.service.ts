@@ -55,24 +55,33 @@ export class UsersService {
   }
 
   calculateReputation(userId: string | undefined): Observable<number> {
-    if (userId) {
-      return this.moviesService.getAllMoviesByUserId(userId).pipe(
-        switchMap((movies) => {
-          const movieIds = movies.map((movie) => movie.id);
-          const reputationObservables = movieIds.map((movieId) =>
-            this.userMoviesService.getUserMoviesByMovieId(movieId).pipe(
-              map((userMovies) => userMovies.reduce((sum, userMovie) => sum + (userMovie.rating || 0), 0))
-            )
-          );
-
-          // Combine all observables and sum the reputations
-          return forkJoin(reputationObservables).pipe(
-            map((reputations) => reputations.reduce((total, rep) => total + rep, 0))
-          );
-        })
-      );
-    } else {
-      return new Observable
+    if (!userId) {
+        return new Observable((observer) => {
+            observer.next(0); // Devolvemos 0 si no hay un userId válido
+            observer.complete();
+        });
     }
-  }
+
+    return this.moviesService.getAllMoviesByUserId(userId).pipe(
+        switchMap((movies) => {
+            const movieIds = movies.map((movie) => movie.id);
+
+            const reputationObservables = movieIds.map((movieId) =>
+                this.userMoviesService.getUserMoviesByMovieId(movieId).pipe(
+                    map((userMovies) => 
+                        // Excluir las valoraciones realizadas por el propio usuario
+                        userMovies
+                            .filter((userMovie) => userMovie.userId !== userId)
+                            .reduce((sum, userMovie) => sum + (userMovie.rating || 0), 0)
+                    )
+                )
+            );
+
+            // Combine all observables y calcula la reputación total
+            return forkJoin(reputationObservables).pipe(
+                map((reputations) => reputations.reduce((total, rep) => total + rep, 0))
+            );
+        })
+    );
+}
 }
