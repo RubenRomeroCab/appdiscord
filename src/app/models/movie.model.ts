@@ -7,8 +7,16 @@ export class Movie {
     genre: string;
     proposerId: string;
     createdAt: string;
-    totalVotes: number = 0;
-    averageRating: number = 0;
+
+    static genres: string[] = [
+      'comedia',
+      'drama',
+      'accion',
+      'thriller',
+      'romance',
+      'terror',
+      'sci-fi',
+    ];
   
     constructor(data: Partial<Movie>) {
       this.name = data.name || '';
@@ -18,8 +26,6 @@ export class Movie {
       this.genre = data.genre || '';
       this.proposerId = data.proposerId || '';
       this.createdAt = data.createdAt || new Date().toISOString();
-      this.totalVotes = data.totalVotes || 0;
-      this.averageRating = data.averageRating || 0;
     }
   
     /**

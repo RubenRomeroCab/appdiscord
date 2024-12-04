@@ -1,12 +1,12 @@
 <div class="container ">
   <div class="text-center">
     <div class=" text-center bg-body-tertiary rounded-3 m-3 p-2">
-      <h2 class="m-3">{{pelicula?.name}}</h2>
-      <img src="{{pelicula?.image}}" alt="{{pelicula?.name}}" class="img-fluid mt-4" width="400px" height="500px">
+      <h2 class="m-3">{{movie?.name}}</h2>
+      <img src="{{movie?.image}}" alt="{{movie?.name}}" class="img-fluid mt-4" width="400px" height="500px">
       <h3 class="mt-4 text-muted">
         Descripcion!
       </h3>
-      <p class="m-4">{{pelicula?.description}}</p>
+      <p class="m-4">{{movie?.description}}</p>
       <div class="embed-responsive embed-responsive-16by9">
         <iframe *ngIf="link" [src]="link | domseguro" class="embed-responsive-item" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
