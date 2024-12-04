@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUser } from '../models/appuser.model';
 import { UsersService } from './users.service';
 
@@ -89,8 +89,8 @@ export class AuthService {
   /**
    * Get the current logged-in user.
    */
-  getCurrentUser(): User | null {
-    return this.auth.currentUser;
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUserSubject.asObservable();
   }
 
   /**

@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.scss'
 })
-export class PeliculasComponent implements OnInit {
+export class MoviesComponent implements OnInit {
 
   movies: { movie: Movie; proposer?: AppUser }[] = [];
 
@@ -120,17 +120,29 @@ export class PeliculasComponent implements OnInit {
 
   deleteMovie(id: string | undefined) {
     if (id) {
-      this.moviesService.deleteMovie(id).subscribe({
-        next: () => {
-          this.applyFilters();
+      this.authService.getCurrentUser().subscribe({
+        next: (user) => {
+          if (user) {
+            console.log('Authenticated user ID:', user.uid);
+  
+            this.moviesService.deleteMovie(id).subscribe({
+              next: () => {
+                this.applyFilters();
+              },
+              error: (err) => {
+                console.log('Error deleting movie:', err);
+              },
+            });
+          } else {
+            console.log('User not authenticated, cannot delete movie');
+          }
         },
         error: (err) => {
-          console.log(err)
-          const user = this.authService.getCurrentUser();
-          console.log('Authenticated user ID:', user?.uid);
-
-        }
+          console.log('Error fetching authenticated user:', err);
+        },
       });
+    } else {
+      console.log('Movie ID is undefined, cannot delete');
     }
   }
 
