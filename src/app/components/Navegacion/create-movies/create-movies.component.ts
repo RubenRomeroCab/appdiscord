@@ -23,6 +23,8 @@ export class CreateMoviesComponent implements OnInit {
   movieId: string | null = null;
   proposer: any;
 
+  genres = Movie.genres;
+
   constructor(
     private moviesService: MoviesService,
     private authService: AuthService,
