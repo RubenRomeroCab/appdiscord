@@ -8,6 +8,9 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from 'firebase/auth';
 import { CommonModule } from '@angular/common';
 import { AppUtils } from '../../../utils/AppUtils';
+import { VotesService } from '../../../services/votes.service';
+import { UserMoviesService } from '../../../services/user-movies.service';
+import { switchMap } from 'rxjs';
 
 
 @Component({
@@ -38,7 +41,9 @@ export class MoviesComponent implements OnInit {
     private moviesService: MoviesService,
     private usersService: UsersService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private votesService: VotesService,
+    private userMoviesService: UserMoviesService
   ) {
     this.authService.getCurrentUserObservable().subscribe(
       (user) => {
@@ -114,32 +119,43 @@ export class MoviesComponent implements OnInit {
     this.router.navigate([`/create/${id}`])
   }
 
-  deleteMovie(id: string | undefined) {
-    if (id) {
-      this.authService.getCurrentUser().subscribe({
+  deleteMovie(id: string | undefined): void {
+    if (!id) {
+        console.error('Movie ID is undefined, cannot delete');
+        return;
+    }
+
+    this.authService.getCurrentUser().subscribe({
         next: (user) => {
-          if (user) {
+            if (!user) {
+                console.error('User not authenticated, cannot delete movie');
+                return;
+            }
+
             console.log('Authenticated user ID:', user.uid);
-  
-            this.moviesService.deleteMovie(id).subscribe({
-              next: () => {
-                this.applyFilters();
-              },
-              error: (err) => {
-                console.error('Error deleting movie:', err);
-              },
+
+            // Primero eliminamos los votos y registros de userMovies
+            const deleteVotes$ = this.votesService.deleteVotesByMovieId(id);
+            const deleteUserMovies$ = this.userMoviesService.deleteUserMoviesByMovieId(id);
+
+            // Una vez eliminados los datos asociados, eliminamos la película
+            deleteVotes$.pipe(
+                switchMap(() => deleteUserMovies$),
+                switchMap(() => this.moviesService.deleteMovie(id))
+            ).subscribe({
+                next: () => {
+                    console.log('Movie and related data deleted successfully');
+                    this.applyFilters();
+                },
+                error: (err) => {
+                    console.error('Error deleting movie or related data:', err);
+                },
             });
-          } else {
-            console.error('User not authenticated, cannot delete movie');
-          }
         },
         error: (err) => {
-          console.error('Error fetching authenticated user:', err);
+            console.error('Error fetching authenticated user:', err);
         },
-      });
-    } else {
-      console.error('Movie ID is undefined, cannot delete');
-    }
-  }
+    });
+}
 
 }

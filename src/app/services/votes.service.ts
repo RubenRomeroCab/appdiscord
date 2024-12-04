@@ -115,4 +115,19 @@ export class VotesService {
       map((votes: Vote[]) => (votes.length > 0 ? votes[0] : undefined))
     );
   }
+
+  deleteVotesByMovieId(movieId: string): Observable<void> {
+    const votesCollection = collection(this.firestore, this.collectionName) as CollectionReference<Vote>;
+    const q = query(votesCollection, where('movieId', '==', movieId));
+
+    return from(getDocs(q)).pipe(
+        switchMap((querySnapshot) => {
+            const deleteOperations = querySnapshot.docs.map((docSnapshot) =>
+                deleteDoc(doc(this.firestore, `${this.collectionName}/${docSnapshot.id}`))
+            );
+            return from(Promise.all(deleteOperations));
+        }),
+        map(() => undefined) // Transformar el resultado en void
+    );
+}
 }

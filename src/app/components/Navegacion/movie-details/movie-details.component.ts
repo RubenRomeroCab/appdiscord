@@ -162,6 +162,7 @@ export class MovieDetailsComponent implements OnInit {
         movieId,
         status: 'voting',
         hasVoted: true,
+        rating: 0,
         createdAt: new Date().toISOString(),
       };
 
