@@ -1,6 +1,6 @@
 <div class="container text-center mt-3">
   <h2>Sube tu Película</h2>
-  <form (ngSubmit)="subir(formPelicula)" #formPelicula="ngForm">
+  <form (ngSubmit)="submit()" [formGroup]="movieForm">
     <!-- Campo para el nombre de la película -->
     <label for="nombrepelicula">Nombre de la película</label>
     <input
@@ -9,8 +9,8 @@
       id="nombrepelicula" 
       name="nombrepelicula" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.name" 
       required
+      formControlName="name"
     >
   
     <!-- Campo para la descripción de la película -->
@@ -21,8 +21,8 @@
       id="descripcion" 
       name="descripcion" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.description" 
       required
+      formControlName="description"
     >
   
     <!-- Campo para la imagen de la película -->
@@ -33,7 +33,7 @@
       id="img" 
       name="img" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.image"
+      formControlName="image"
     >
   
     <!-- Campo para el tráiler de la película -->
@@ -44,18 +44,21 @@
       id="trailer" 
       name="trailer" 
       class="form-control mb-3" 
-      [(ngModel)]="pelicula.trailer"
+      formControlName="trailer"
+    >
+
+    <!-- Campo para el tráiler de la película -->
+    <label for="genre">Genero</label>
+    <input 
+      type="text" 
+      placeholder="Ingresa el genero" 
+      id="trailer" 
+      name="trailer" 
+      class="form-control mb-3" 
+      formControlName="genre"
     >
   
-    <!-- Campo oculto para almacenar el ID del usuario -->
-    <input type="hidden" [(ngModel)]="pelicula.proposerId" name="idUser">
-  
-    <input type="hidden" [(ngModel)]="pelicula.proposerId" name="imgUser">
     <!-- Botón para enviar el formulario -->
     <button  class="btn btn-primary">Enviar</button>
-   
   </form>
-
-  <p class="text-danger mt-3" >Asegúrate de tener tu perfil listo antes de subir las películas</p>
-  <a [routerLink]="['/perfile']">Ver tu perfil</a>
 </div>

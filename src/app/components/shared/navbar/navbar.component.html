@@ -17,7 +17,7 @@
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['series']">Series</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="user">
             <a class="nav-link" [routerLink]="['perfile']">Perfil</a>
           </li>
         </ul>

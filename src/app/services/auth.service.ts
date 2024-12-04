@@ -30,21 +30,31 @@ export class AuthService {
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        if (user) {
-
-          updateProfile(user, { displayName: name });
-
+        if (!user) {
+          return null;
+        }
+  
+        // Update the display name in Firebase Auth
+        return updateProfile(user, { displayName: name }).then(() => {
+          // Create AppUser object
           const newUser: AppUser = {
             id: user.uid,
+            name: name,
             reputation: 0,
             likedGenres: {},
           };
-
+  
           // Save user to Firestore
-          return this.usersService.saveUserToFirestore(newUser).then(() => newUser);
-        }
-
-        return null;
+          return new Promise<AppUser | null>((resolve, reject) => {
+            this.usersService.saveUser(newUser).subscribe({
+              next: () => resolve(newUser),
+              error: (error) => {
+                console.error('Error saving user to Firestore:', error);
+                reject(error);
+              },
+            });
+          });
+        });
       })
       .catch((error) => {
         console.error('Error during registration:', error);

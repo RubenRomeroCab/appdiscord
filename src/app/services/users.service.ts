@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppUser } from '../models/appuser.model';
-import { doc, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { doc, docData, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,36 +10,36 @@ export class UsersService {
 
   private collectionName = 'users';
 
-  constructor(
-    private firestore: Firestore
-  ) { }
+  constructor(private firestore: Firestore) {}
 
   /**
    * Save a new user to Firestore.
    * @param user - User object to save.
+   * @returns An observable that resolves when the user is saved.
    */
-  async saveUserToFirestore(user: AppUser): Promise<void> {
+  saveUser(user: AppUser): Observable<void> {
     const userRef = doc(this.firestore, `${this.collectionName}/${user.id}`);
-    return setDoc(userRef, user);
+    return from(setDoc(userRef, user));
   }
 
   /**
    * Get a user by their ID.
    * @param userId - ID of the user to fetch.
+   * @returns An observable emitting the user data or undefined if not found.
    */
-  async getUserById(userId: string): Promise<AppUser | undefined> {
+  getUserById(userId: string): Observable<AppUser | undefined> {
     const userRef = doc(this.firestore, `${this.collectionName}/${userId}`);
-    const userDoc = await getDoc(userRef);
-    return userDoc.exists() ? (userDoc.data() as AppUser) : undefined;
+    return docData(userRef, { idField: 'id' }) as Observable<AppUser | undefined>;
   }
 
   /**
    * Update user data in Firestore.
    * @param userId - ID of the user to update.
    * @param data - Partial user data to update.
+   * @returns An observable that resolves when the update is complete.
    */
-  async updateUser(userId: string, data: Partial<AppUser>): Promise<void> {
+  updateUser(userId: string, data: Partial<AppUser>): Observable<void> {
     const userRef = doc(this.firestore, `${this.collectionName}/${userId}`);
-    return updateDoc(userRef, data);
+    return from(updateDoc(userRef, data));
   }
 }

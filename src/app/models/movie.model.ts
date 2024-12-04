@@ -1,13 +1,51 @@
-export interface Movie {
-    id?: string; // Unique identifier (optional for new movies)
-    name: string; // Name of the movie
-    description?: string; // Detailed description
-    image?: string; // URL of the movie image
-    trailer?: string; // URL of the trailer video
-    genre: string; // Movie genre (e.g., "comedy", "drama")
-    proposerId: string; // ID of the user who proposed the movie
-    createdAt: string; // ISO date of when the movie was added
-    totalVotes: number; // Total number of votes the movie has received
-    averageRating: number; // Average rating (1-5)
-    isNextToWatch: boolean; // Indicates if this movie is the next to be watched
-}
+export class Movie {
+    id?: string; // Firestore document ID
+    name: string;
+    description: string;
+    image?: string;
+    trailer?: string;
+    genre: string;
+    proposerId: string;
+    createdAt: string;
+
+    static genres: string[] = [
+      'comedia',
+      'drama',
+      'accion',
+      'thriller',
+      'romance',
+      'terror',
+      'sci-fi',
+    ];
+  
+    constructor(data: Partial<Movie>) {
+      this.name = data.name || '';
+      this.description = data.description || '';
+      this.image = data.image || '';
+      this.trailer = data.trailer || '';
+      this.genre = data.genre || '';
+      this.proposerId = data.proposerId || '';
+      this.createdAt = data.createdAt || new Date().toISOString();
+    }
+  
+    /**
+     * Prepare the data for Firestore (removes the `id` field).
+     * @returns A plain object without `id`.
+     */
+    toFirestore(): Omit<Movie, 'id'> {
+      const { id, ...data } = this;
+      return data as Omit<Movie, 'id'>;
+    }
+  
+    /**
+     * Convert Firestore document data into a Movie instance.
+     * @param id - Firestore document ID.
+     * @param data - Firestore document data.
+     * @returns A new Movie instance.
+     */
+    static fromFirestore(id: string, data: Partial<Movie>): Movie {
+      const movie = new Movie(data); // Ensure proposerId exists in the data
+      movie.id = id;
+      return movie;
+    }
+  }
