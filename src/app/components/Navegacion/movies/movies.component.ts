@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MoviesService } from '../../../services/movies.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Movie } from '../../../models/movie.model';
 import { AppUser } from '../../../models/appuser.model';
 import { UsersService } from '../../../services/users.service';
@@ -17,7 +17,8 @@ import { switchMap } from 'rxjs';
   selector: 'app-movies',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.scss'
