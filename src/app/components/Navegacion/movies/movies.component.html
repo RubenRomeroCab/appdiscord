@@ -11,8 +11,7 @@
           <h5 class="card-title">{{item.movie.name}}</h5>
           <!-- <p class="card-text">{{AppUtils.cortarTexto(item.movie.description,200)}}</p> -->
           <p class="card-text">{{item.movie.genre}}</p>
-          <p>
-          Recomendada por :   {{ item.proposer?.name }}</p>
+          <!-- <p>Recomendada por :   {{ item.proposer?.name }}</p> -->
           <button (click)="viewMovie(item.movie.id)" class="btn btn-primary">Ver mas</button>
           <button *ngIf="user && user.uid === item.movie.proposerId" (click)="deleteMovie(item.movie.id)" class="btn btn-accent">Borrar</button>
           <button *ngIf="user && user.uid === item.movie.proposerId" (click)="editMovie(item.movie.id)" class="btn btn-accent">Editar</button>
