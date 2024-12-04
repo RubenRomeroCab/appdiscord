@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, query, orderBy, startAfter, limit, where, CollectionReference, Query, DocumentData, collectionData, addDoc, doc, deleteDoc, docData, updateDoc } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { Firestore, collection, query, orderBy, startAfter, limit, where, CollectionReference, Query, DocumentData, collectionData, addDoc, doc, deleteDoc, docData, updateDoc, getDocs } from '@angular/fire/firestore';
+import { from, map, Observable } from 'rxjs';
 import { Movie } from '../models/movie.model';
 
 @Injectable({
@@ -99,5 +99,17 @@ export class MoviesService {
     // Use `from` to convert the promise returned by `deleteDoc` into an observable
     return from(deleteDoc(movieDoc));
   }
+
+  getAllMovies(): Observable<Movie[]> {
+    const moviesCollection = collection(this.firestore, this.collectionName) as CollectionReference<Movie>;
+
+    return from(getDocs(moviesCollection)).pipe(
+        map((querySnapshot) =>
+            querySnapshot.docs.map((doc) => 
+                Movie.fromFirestore(doc.id, doc.data() as Movie)
+            )
+        )
+    );
+}
 
 }

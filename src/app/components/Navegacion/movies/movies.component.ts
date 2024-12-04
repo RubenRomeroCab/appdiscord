@@ -7,6 +7,7 @@ import { UsersService } from '../../../services/users.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from 'firebase/auth';
 import { CommonModule } from '@angular/common';
+import { AppUtils } from '../../../utils/AppUtils';
 
 
 @Component({
@@ -30,6 +31,8 @@ export class MoviesComponent implements OnInit {
   loading = false;
 
   user: User | null = null;
+
+  AppUtils = AppUtils;
 
   constructor(
     private moviesService: MoviesService,
@@ -96,13 +99,6 @@ export class MoviesComponent implements OnInit {
   loadMore(): void {
     this.currentPage++;
     this.loadMovies();
-  }
-
-  cortarTexto(texto: string, longitudMaxima: number): string {
-    if (texto.length > longitudMaxima) {
-      return texto.substring(0, longitudMaxima) + "...";  // Cortar y agregar "..."
-    }
-    return texto;  // Si el texto es corto, devuélvelo tal cual
   }
 
   onImageError(event: Event): void {

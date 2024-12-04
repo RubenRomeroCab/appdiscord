@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppUser } from '../models/appuser.model';
-import { doc, docData, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { collection, collectionData, CollectionReference, doc, docData, DocumentData, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -41,5 +41,10 @@ export class UsersService {
   updateUser(userId: string, data: Partial<AppUser>): Observable<void> {
     const userRef = doc(this.firestore, `${this.collectionName}/${userId}`);
     return from(updateDoc(userRef, data));
+  }
+
+  getAllUsers(): Observable<AppUser[]> {
+    const usersCollection = collection(this.firestore, this.collectionName) as CollectionReference<DocumentData>;
+    return collectionData(usersCollection, { idField: 'id' }) as Observable<AppUser[]>;
   }
 }

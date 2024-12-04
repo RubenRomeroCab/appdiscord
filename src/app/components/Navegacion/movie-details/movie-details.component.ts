@@ -11,6 +11,8 @@ import { VotesService } from '../../../services/votes.service';
 import { Vote } from '../../../models/vote.model';
 import { UserMoviesService } from '../../../services/user-movies.service';
 import { UserMovie } from '../../../models/user_movie.model';
+import { UsersService } from '../../../services/users.service';
+import { map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-movie-details',
@@ -36,7 +38,8 @@ export class MovieDetailsComponent implements OnInit {
     private authService: AuthService,
     private votesService: VotesService,
     private userMoviesService: UserMoviesService,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private usersService: UsersService
   ) { }
 
   ngOnInit(): void {
@@ -176,33 +179,82 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   rateMovie(movieId: string | undefined, rating: number): void {
-    if (!movieId) return;
-
+    if (!movieId || !this.movie) return;
+  
     this.authService.getCurrentUser().subscribe((user) => {
       if (!user) {
         this._snackbar.open('You must be logged in to rate', undefined, { duration: 3000 });
         return;
       }
-
-      const userMovie: Omit<UserMovie, 'id'> = {
-        userId: user.uid,
-        movieId,
-        status: 'watched',
-        hasVoted: true,
-        rating,
-        createdAt: new Date().toISOString(),
-      };
-
-      this.userMoviesService.addOrUpdateUserMovie(userMovie).subscribe({
-        next: () => {
-          this._snackbar.open('Movie rated successfully', undefined, { duration: 3000 });
-          this.loadUserInteractions(); // Recargar los datos del usuario
-        },
-        error: (err) => {
-          console.error('Error rating movie:', err);
-          this._snackbar.open('Error rating movie', undefined, { duration: 3000 });
-        },
+  
+      // Verificar la valoración previa
+      this.userMoviesService.getUserMovie(user.uid, movieId).subscribe((existingUserMovie) => {
+        const previousRating = existingUserMovie?.rating || 0;
+  
+        const userMovie: Omit<UserMovie, 'id'> = {
+          userId: user.uid,
+          movieId,
+          status: 'watched',
+          hasVoted: true,
+          rating,
+          createdAt: existingUserMovie?.createdAt || new Date().toISOString(),
+        };
+  
+        // Actualizar o agregar la nueva valoración
+        this.userMoviesService.addOrUpdateUserMovie(userMovie).subscribe({
+          next: () => {
+            this._snackbar.open('Movie rated successfully', undefined, { duration: 3000 });
+  
+            // Actualizar géneros preferidos del usuario
+            if (this.movie?.genre) {
+              this.updateLikedGenres(user.uid, this.movie.genre, previousRating, rating);
+            }
+  
+            this.loadUserInteractions(); // Recargar los datos del usuario
+          },
+          error: (err) => {
+            console.error('Error rating movie:', err);
+            this._snackbar.open('Error rating movie', undefined, { duration: 3000 });
+          },
+        });
       });
     });
+  }
+
+  private updateLikedGenres(userId: string, genre: string, previousRating: number, newRating: number): void {
+    this.usersService.getUserById(userId)
+      .pipe(
+        take(1), // Tomamos solo un valor de la suscripción
+        map((user) => {
+          if (!user) {
+            throw new Error('User not found');
+          }
+  
+          const likedGenres = user.likedGenres || {};
+  
+          // Restar la valoración anterior
+          likedGenres[genre] = (likedGenres[genre] || 0) - previousRating;
+  
+          // Evitar valores negativos
+          likedGenres[genre] = Math.max(0, likedGenres[genre]);
+  
+          // Sumar la nueva valoración
+          likedGenres[genre] += newRating;
+  
+          return likedGenres;
+        }),
+        switchMap((updatedLikedGenres) => {
+          // Actualizar los géneros preferidos
+          return this.usersService.updateUser(userId, { likedGenres: updatedLikedGenres });
+        })
+      )
+      .subscribe({
+        next: () => {
+          console.log(`Liked genres updated successfully for user ${userId}`);
+        },
+        error: (err) => {
+          console.error('Error updating liked genres:', err);
+        },
+      });
   }
 }
