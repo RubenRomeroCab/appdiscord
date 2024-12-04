@@ -17,7 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './create-movies.component.html',
   styleUrl: './create-movies.component.scss'
 })
-export class CreatePeliculasComponent implements OnInit {
+export class CreateMoviesComponent implements OnInit {
 
   movieForm: FormGroup;
   movieId: string | null = null;

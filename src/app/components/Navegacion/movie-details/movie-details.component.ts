@@ -14,10 +14,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './movie-details.component.html',
   styleUrl: './movie-details.component.scss'
 })
-export class PeliculaDetailsComponent implements OnInit {
+export class MovieDetailsComponent implements OnInit {
 
   movie!: Movie | null;
-  link!: string | null
+  trailerLink!: string | null
 
   movieId: string | null = null;
 
@@ -33,6 +33,9 @@ export class PeliculaDetailsComponent implements OnInit {
       this.moviesService.getMovieById(this.movieId).subscribe(
         (movie) => {
           this.movie = movie;
+          if (movie.trailer) {
+            this.trailerLink = 'https://www.youtube.com/embed/' + AppUtils.getYouTubeId(movie.trailer);
+          }
         },
         (error) => {
           console.error('Error loading movie:', error.message);

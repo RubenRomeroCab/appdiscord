@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.scss'
 })
-export class PeliculasComponent implements OnInit {
+export class MoviesComponent implements OnInit {
 
   movies: { movie: Movie; proposer?: AppUser }[] = [];
 

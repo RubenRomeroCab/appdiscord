@@ -8,14 +8,12 @@
       </h3>
       <p class="m-4">{{movie?.description}}</p>
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe *ngIf="link" [src]="link | domseguro" class="embed-responsive-item" frameborder="0"
+        <iframe *ngIf="trailerLink" [src]="trailerLink | domseguro" class="embed-responsive-item" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
         </iframe>
       </div>
       <button class="btn btn-primary m-4 btn-lg">Votar</button>
-
-
     </div>
   </div>
 
