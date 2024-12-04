@@ -26,7 +26,14 @@ export class ProfileComponent {
     private usersService: UsersService,
     private fb: FormBuilder,
     private snackbar: MatSnackBar
-  ) { }
+  ) {
+    this.profileForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      avatar: ['', [Validators.pattern(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/)]],
+      reputation: [{ value: 0, disabled: true }],
+      likedGenres: [{ value: {}, disabled: true }]
+    });
+   }
 
   ngOnInit(): void {
     this.loadUserProfile();

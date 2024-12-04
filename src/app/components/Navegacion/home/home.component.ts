@@ -15,6 +15,7 @@ export class ScoredMovie extends Movie {
   constructor(data: Partial<ScoredMovie>) {
     super(data);
     this.score = data.score || 0;
+    this.id = data.id;
   }
 }
 
