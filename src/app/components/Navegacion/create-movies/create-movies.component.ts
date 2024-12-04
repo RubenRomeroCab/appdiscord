@@ -98,6 +98,7 @@ export class CreateMoviesComponent implements OnInit {
               this.moviesService.addMovie(newMovie.toFirestore()).subscribe({
                 next: () => {
                   this.router.navigate(['peliculas']);
+                  this.movieForm.reset();
                 },
                 error: (error) => {
                   console.error('Error adding movie:', error.message);

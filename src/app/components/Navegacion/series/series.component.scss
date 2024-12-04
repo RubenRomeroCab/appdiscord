@@ -5,6 +5,9 @@
     height: 600px;     /* Asegura una altura constante en pantallas grandes */
   }
   
+  .carousel-caption{
+    padding-bottom: 4.25rem;
+  }
   /* Responsivo: en pantallas pequeñas, ajustamos la altura */
   @media (max-width: 767px) {
     .carousel-item img {
