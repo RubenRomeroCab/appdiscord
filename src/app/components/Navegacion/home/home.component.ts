@@ -52,11 +52,12 @@ export class HomeComponent {
     
   }
 
+  
+
   loadUsers(): void {
     this.userService.getAllUsers().subscribe(
       (users) => {
         this.users = users;
-        console.log(users)
       },
       (error) => {
         console.error('Error fetching users:', error);

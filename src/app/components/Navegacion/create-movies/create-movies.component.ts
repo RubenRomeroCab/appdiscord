@@ -22,6 +22,7 @@ export class CreateMoviesComponent implements OnInit {
   movieForm: FormGroup;
   movieId: string | null = null;
   proposer: any;
+  
 
   genres = Movie.genres;
 
@@ -38,7 +39,7 @@ export class CreateMoviesComponent implements OnInit {
       description: [''],
       image: ['', [Validators.pattern(/https?:\/\/.+/)]], // Ensure valid URL if provided
       trailer: ['', [Validators.pattern(/https?:\/\/.+/)]], // Ensure valid URL if provided
-      genre: ['', [Validators.required]],
+      genre: [null, [Validators.required]],
     });
   }
 
@@ -99,8 +100,10 @@ export class CreateMoviesComponent implements OnInit {
         
               this.moviesService.addMovie(newMovie.toFirestore()).subscribe({
                 next: () => {
-                  this.router.navigate(['peliculas']);
+                  this._snackbar.open("Pelicula Creada" , undefined , AppUtils.snackBarSuccessConfig)
                   this.movieForm.reset();
+                  this.router.navigate(['peliculas']);
+                                 
                 },
                 error: (error) => {
                   console.error('Error adding movie:', error.message);

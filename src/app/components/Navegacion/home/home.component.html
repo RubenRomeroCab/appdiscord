@@ -36,7 +36,7 @@
             <img src="{{movie.image}}" class="card-img-top" alt="{{movie.name}}" (error)="onImageError($event)">
           <div class="card-body">
             <h5 class="card-title">{{ movie.name }}</h5>
-            <p class="card-text">{{ movie.description | slice:0:200 }}</p>
+            <p class="card-text">{{ AppUtils.cortarTexto(movie.description,100)}}</p>
             <p class="fw-bold">{{ movie.genre }}</p>
             <button class="btn btn-primary" (click)="showMovieDetail(movie.id)">Ver Película</button>
           </div>

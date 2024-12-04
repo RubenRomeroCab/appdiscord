@@ -9,8 +9,9 @@
         <img src="{{item.movie.image}}" class="card-img-top" alt="{{item.movie.name}}" (error)="onImageError($event)">
         <div class="card-body">
           <h5 class="card-title">{{item.movie.name}}</h5>
-          <!-- <p class="card-text">{{AppUtils.cortarTexto(item.movie.description,200)}}</p> -->
+          <p class="card-text">{{AppUtils.cortarTexto(item.movie.description,100)}}</p> 
           <p class="card-text">{{item.movie.genre}}</p>
+
           <!-- <p>Recomendada por :   {{ item.proposer?.name }}</p> -->
           <button (click)="viewMovie(item.movie.id)" class="btn btn-primary">Ver mas</button>
           <button *ngIf="user && user.uid === item.movie.proposerId" (click)="deleteMovie(item.movie.id)" class="btn btn-accent">Borrar</button>
