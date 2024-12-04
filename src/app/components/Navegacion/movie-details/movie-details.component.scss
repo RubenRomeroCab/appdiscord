@@ -16,3 +16,32 @@
       height: 600px; /* Aumenta aún más la altura para pantallas muy grandes */
     }
   }
+
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+
+    &.active {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+  }
+
+  .stars {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+  }
+  
+  .stars span {
+    font-size: 2rem;
+    color: gray;
+  }
+  
+  .stars span.filled {
+    color: gold;
+  }

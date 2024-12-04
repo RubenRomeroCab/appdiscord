@@ -85,22 +85,35 @@ export class CreateMoviesComponent implements OnInit {
           }
         );
       } else {
-        // Si no hay un ID, crear una nueva película
-        const newMovie = new Movie({
-          ...movieData,
-          proposerId: this.authService.getCurrentUser()?.uid || '',
-          createdAt: new Date().toISOString(),
-        });
-  
-        this.moviesService.addMovie(newMovie.toFirestore()).subscribe(
-          () => {
-            this.router.navigate(['peliculas']);
+        this.authService.getCurrentUser().subscribe({
+          next: (user) => {
+            if (user) {
+              // Crear una nueva película
+              const newMovie = new Movie({
+                ...movieData,
+                proposerId: user.uid,
+                createdAt: new Date().toISOString(),
+              });
+        
+              this.moviesService.addMovie(newMovie.toFirestore()).subscribe({
+                next: () => {
+                  this.router.navigate(['peliculas']);
+                },
+                error: (error) => {
+                  console.error('Error adding movie:', error.message);
+                  this._snackbar.open('Error saving the movie', undefined, AppUtils.snackBarErrorConfig);
+                },
+              });
+            } else {
+              console.log('User not authenticated, cannot add movie');
+              this._snackbar.open('You must be logged in to add a movie', undefined, AppUtils.snackBarErrorConfig);
+            }
           },
-          (error) => {
-            console.error('Error adding movie:', error.message);
-            this._snackbar.open('Error saving the movie', undefined, AppUtils.snackBarErrorConfig);
-          }
-        );
+          error: (err) => {
+            console.error('Error fetching current user:', err);
+            this._snackbar.open('Error fetching user information', undefined, AppUtils.snackBarErrorConfig);
+          },
+        });
       }
     } else {
       this._snackbar.open('Error in the form', undefined, AppUtils.snackBarErrorConfig);
