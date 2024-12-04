@@ -56,7 +56,6 @@ export class HomeComponent {
     this.userService.getAllUsers().subscribe(
       (users) => {
         this.users = users;
-        console.log(users)
       },
       (error) => {
         console.error('Error fetching users:', error);
@@ -161,7 +160,6 @@ export class HomeComponent {
           // Limitar el número de películas si es necesario
           const maxMoviesToShow = 5;
           this.recommendedMovies = bestMovies.slice(0, maxMoviesToShow);
-          console.log(this.recommendedMovies)
         });
       })
       .catch((error) => {

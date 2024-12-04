@@ -108,7 +108,7 @@ export class CreateMoviesComponent implements OnInit {
                 },
               });
             } else {
-              console.log('User not authenticated, cannot add movie');
+              console.error('User not authenticated, cannot add movie');
               this._snackbar.open('You must be logged in to add a movie', undefined, AppUtils.snackBarErrorConfig);
             }
           },
