@@ -49,6 +49,7 @@
 
     <!-- Campo para el tráiler de la película -->
     <label for="genre">Genero</label>
+ 
     <select 
       id="genre" 
       name="genre" 
@@ -56,6 +57,7 @@
       required 
       formControlName="genre"
     >
+    <option value="null" disabled>Seleccione un género</option>
       <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
     </select>
   

@@ -54,6 +54,8 @@ export class HomeComponent {
 
   }
 
+  
+
   loadUsers(): void {
     this.userService.getAllUsers().subscribe(
       (users) => {
